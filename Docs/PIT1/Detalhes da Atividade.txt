@@ -1,0 +1,20 @@
+Olá, Turma!
+
+Espero que estejam bem!
+
+Sobre a atividade da disciplina, devemos seguir o que está sendo solicitado no material teórico, que é o desenvolvimento das três situações-problemas. No item Problema em Foco, foi informado um passo a passo do que deve ser desenvolvido na atividade.
+
+O tema do aplicativo é uma cafeteria gourmet, conforme consta na situação problema 1.
+
+Na situação problema 1 devemos contar 15 histórias, indico utilizar a tabela que está no template para estruturar cada história.
+Para a situação problema 2 deve ser apresentada os artefatos básicos da UML e os casos de uso expandidos (Diagrama de caso de uso geral; Caso de uso expandidos; Diagramas de classes; Diagramas de sequência)
+Já na situação-problema 3 deve ser apresentado o Mockup/wireframe, isso é as telas do APP, com possíveis telas de erros e detalhes.
+A atividade pode ser entregue até 05/06, mas não deixem para a última hora, ok!?
+
+No item Orientações da Atividade está disponível um vídeo com os principais detalhes da atividade.
+
+Bons estudos!
+
+Abraços,
+Tutor Julio Cesar
+
