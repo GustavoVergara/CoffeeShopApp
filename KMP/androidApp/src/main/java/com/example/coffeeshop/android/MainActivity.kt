@@ -6,11 +6,18 @@ import android.util.Log
 import android.view.WindowManager
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.compose.foundation.Image
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.TextUnit
+import androidx.compose.ui.unit.sp
 import com.example.coffeeshop.Greeting
 
 
@@ -51,10 +58,21 @@ fun GreetingView(text: String) {
     Text(text = text)
 }
 
-@Preview
+@Composable
+fun MenuItem(image: ImageBitmap, title: String, description: String) {
+    Row {
+        Image(bitmap = image, contentDescription = title)
+        Column {
+            Text(text = title, fontSize = 24.sp)
+            Text(text = description)
+        }
+    }
+}
+
+@Preview(showBackground = true, device = "spec:width=411dp,height=891dp")
 @Composable
 fun DefaultPreview() {
     MyApplicationTheme {
-        GreetingView("Hello, Android!")
+        MenuItem("Cappuccino", "Feito com leite cremoso e café expresso")
     }
 }
