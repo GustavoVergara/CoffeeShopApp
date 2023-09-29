@@ -1,0 +1,76 @@
+{
+    "store_id": "0",
+    "store_name": "Loja A",
+    "products": [
+        {
+            "id": "capp",
+            "name": "Cappuccino",
+            "description": "Feito com leite espumado e café espresso. Contem Gluten e Lactose.",
+            "photo": "https://globalassets.starbucks.com/digitalassets/products/bev/SBX20190617_Cappuccino.jpg?impolicy=1by1_wide_topcrop_630",
+            "skus": [
+                {
+                    "id": "capp-g",
+                    "price": 14,
+                    "attributes": {
+                        "tamanho": "Grande 400ml"
+                    }
+                },
+                {
+                    "id": "capp-m",
+                    "price": 12,
+                    "attributes": {
+                        "tamanho": "Médio 300ml"
+                    }
+                },
+                {
+                    "id": "capp-p",
+                    "price": 10,
+                    "attributes": {
+                        "tamanho": "Pequeno 200ml"
+                    }
+                }
+            ],
+            "all_attributes" : [
+                {
+                    "key": "tamanho",
+                    "name": "Tamanho"
+                }
+            ]
+        },
+        {
+            "id": "flat-white",
+            "name": "Flat white",
+            "description": "Feito com leite e café espresso. Contem Gluten e Lactose.",
+            "photo": "https://globalassets.starbucks.com/digitalassets/products/bev/SBX20230406_FlatWhite.jpg?impolicy=1by1_wide_topcrop_630",
+            "skus": [
+                {
+                    "id": "flat-white-g",
+                    "price": 14,
+                    "attributes": {
+                        "tamanho": "Grande 400ml"
+                    }
+                },
+                {
+                    "id": "flat-white-m",
+                    "price": 12,
+                    "attributes": {
+                        "tamanho": "Médio 300ml"
+                    }
+                },
+                {
+                    "id": "flat-white-p",
+                    "price": 10,
+                    "attributes": {
+                        "tamanho": "Pequeno 200ml"
+                    }
+                }
+            ],
+            "all_attributes" : [
+                {
+                    "key": "tamanho",
+                    "name": "Tamanho"
+                }
+            ]
+        }
+    ]
+}
