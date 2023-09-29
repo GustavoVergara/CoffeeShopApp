@@ -1,0 +1,36 @@
+{
+  "configurations" : [
+    {
+      "id" : "0DBE5EAB-E413-4779-A2BB-9D2E37F2712E",
+      "name" : "Configuration 1",
+      "options" : {
+
+      }
+    }
+  ],
+  "defaultOptions" : {
+    "codeCoverage" : false,
+    "targetForVariableExpansion" : {
+      "containerPath" : "container:CoffeeShop.xcodeproj",
+      "identifier" : "6BC14EF72AC777B3000ADFEC",
+      "name" : "CoffeeShop"
+    }
+  },
+  "testTargets" : [
+    {
+      "target" : {
+        "containerPath" : "container:..\/Modules\/CoffeeShopUI",
+        "identifier" : "CoffeeShopUITests",
+        "name" : "CoffeeShopUITests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/Modules\/SwiftHTTP",
+        "identifier" : "HTTPTests",
+        "name" : "HTTPTests"
+      }
+    }
+  ],
+  "version" : 1
+}
