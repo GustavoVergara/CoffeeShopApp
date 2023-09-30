@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "Resourceful",
+        "repositoryURL": "https://github.com/GustavoVergara/Resourceful.git",
+        "state": {
+          "branch": "main",
+          "revision": "39fc5a5e04dc986aea5d98b84a248bf1eff2f33d",
+          "version": null
+        }
+      }
+    ]
+  },
+  "version": 1
+}

@@ -12,6 +12,7 @@
 		6BC14F032AC777B7000ADFEC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BC14F022AC777B7000ADFEC /* Preview Assets.xcassets */; };
 		6BF6EF872AC77CFE007C655C /* CoffeeShopUI in Frameworks */ = {isa = PBXBuildFile; productRef = 6BF6EF862AC77CFE007C655C /* CoffeeShopUI */; };
 		6BF6EF892AC77CFE007C655C /* HTTP in Frameworks */ = {isa = PBXBuildFile; productRef = 6BF6EF882AC77CFE007C655C /* HTTP */; };
+		6BF6EF8C2AC7A4B5007C655C /* Resourceful in Frameworks */ = {isa = PBXBuildFile; productRef = 6BF6EF8B2AC7A4B5007C655C /* Resourceful */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -21,6 +22,7 @@
 		6BC14F022AC777B7000ADFEC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		6BC14F262AC77945000ADFEC /* SwiftHTTP */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SwiftHTTP; path = ../Modules/SwiftHTTP; sourceTree = "<group>"; };
 		6BF6EF842AC77B67007C655C /* CoffeeShopUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CoffeeShopUI; path = ../Modules/CoffeeShopUI; sourceTree = "<group>"; };
+		6BF6EF8D2AC7A4EA007C655C /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Core; path = ../Modules/Core; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -29,6 +31,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				6BF6EF892AC77CFE007C655C /* HTTP in Frameworks */,
+				6BF6EF8C2AC7A4B5007C655C /* Resourceful in Frameworks */,
 				6BF6EF872AC77CFE007C655C /* CoffeeShopUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -75,6 +78,7 @@
 		6BC14F252AC77945000ADFEC /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				6BF6EF8D2AC7A4EA007C655C /* Core */,
 				6BF6EF842AC77B67007C655C /* CoffeeShopUI */,
 				6BC14F262AC77945000ADFEC /* SwiftHTTP */,
 			);
@@ -107,6 +111,7 @@
 			packageProductDependencies = (
 				6BF6EF862AC77CFE007C655C /* CoffeeShopUI */,
 				6BF6EF882AC77CFE007C655C /* HTTP */,
+				6BF6EF8B2AC7A4B5007C655C /* Resourceful */,
 			);
 			productName = CoffeeShop;
 			productReference = 6BC14EF82AC777B3000ADFEC /* CoffeeShop.app */;
@@ -136,6 +141,9 @@
 				Base,
 			);
 			mainGroup = 6BC14EEF2AC777B3000ADFEC;
+			packageReferences = (
+				6BF6EF8A2AC7A4B5007C655C /* XCRemoteSwiftPackageReference "Resourceful" */,
+			);
 			productRefGroup = 6BC14EF92AC777B3000ADFEC /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -364,6 +372,17 @@
 		};
 /* End XCConfigurationList section */
 
+/* Begin XCRemoteSwiftPackageReference section */
+		6BF6EF8A2AC7A4B5007C655C /* XCRemoteSwiftPackageReference "Resourceful" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/GustavoVergara/Resourceful.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
 /* Begin XCSwiftPackageProductDependency section */
 		6BF6EF862AC77CFE007C655C /* CoffeeShopUI */ = {
 			isa = XCSwiftPackageProductDependency;
@@ -372,6 +391,11 @@
 		6BF6EF882AC77CFE007C655C /* HTTP */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = HTTP;
+		};
+		6BF6EF8B2AC7A4B5007C655C /* Resourceful */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 6BF6EF8A2AC7A4B5007C655C /* XCRemoteSwiftPackageReference "Resourceful" */;
+			productName = Resourceful;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};
