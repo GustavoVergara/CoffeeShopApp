@@ -14,6 +14,7 @@ struct RouteMapper: RouteMapperProtocol {
     private func url(route: HTTPRoute) throws -> URL {
         var urlComponents = URLComponents()
         urlComponents.host = route.host
+        urlComponents.port = route.port
         urlComponents.scheme = route.scheme
         urlComponents.path = route.path
         let query = route.query.filter { $0.value.isEmpty == false }

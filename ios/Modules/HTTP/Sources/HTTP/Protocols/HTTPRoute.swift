@@ -1,6 +1,7 @@
 public protocol HTTPRoute {
     var scheme: String { get }
     var host: String { get }
+    var port: Int? { get }
     var path: String { get }
     var method: HTTPMethod { get }
     var headers: [String: String] { get }
@@ -10,6 +11,7 @@ public protocol HTTPRoute {
 
 public extension HTTPRoute {
     var scheme: String { "https" }
+    var port: Int? { nil }
     var headers: [String: String] { [:] }
     var query: [String: String] { [:] }
     var body: HTTPBody? { nil }
