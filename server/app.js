@@ -2,10 +2,13 @@ const express = require('express')
 const app = express()
 const port = process.env.PORT || 5000
 const filesystem = require('fs');
+const path = require('path');
+const rootPath = path.resolve(__dirname);
 
 app.get("/store/:storeID/menu", (request, response) => {
-  var menuJSON = filesystem.readFileSync(`jsons/store/${request.params.storeID}/menu.json`, "utf8")
-  response.send(menuJSON)
+//   var menuJSON = filesystem.readFileSync(`jsons/store/${request.params.storeID}/menu.json`, "utf8")
+//   response.send(menuJSON)
+  response.sendFile(`jsons/store/${request.params.storeID}/menu.json`, { root: rootPath })
 })
 
 // app.get("/game/:gameID", (request, response) => {
