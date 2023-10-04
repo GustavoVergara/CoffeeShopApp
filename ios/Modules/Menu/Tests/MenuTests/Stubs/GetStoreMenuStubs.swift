@@ -8,6 +8,7 @@
 import Foundation
 
 enum GetStoreMenuStubs {
+    static var storeAJSONData: Data { storeAJSONString.data(using: .utf8)! }
     static var storeAJSONString: String {
         """
         {
