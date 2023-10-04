@@ -10,7 +10,7 @@ class MenuNetworker: MenuNetworking {
     let jsonDecoder: JSONDecoder
     
     init(
-        httpClient: HTTPClientProtocol = HTTPClient(),
+        httpClient: HTTPClientProtocol = HTTPClient(logger: HTTPLogger(level: .outgoing)),
         jsonDecoder: JSONDecoder = JSONDecoder()
     ) {
         self.httpClient = httpClient
@@ -27,7 +27,9 @@ class MenuNetworker: MenuNetworking {
 enum MenuEndpointRoute: HTTPRoute {
     case getMenu(storeID: String)
     
-    var host: String { "localhost:5000" }
+    var scheme: String { "http" }
+    var host: String { "localhost" }
+    var port: Int? { 5000 }
     var path: String {
         switch self {
         case .getMenu(let storeID):

@@ -1,28 +1,41 @@
 import XCTest
+import CoreTestKit
 import HTTP
 import HTTPTestKit
 @testable import Menu
 
 final class MenuNetworkerTests: XCTestCase {
-    var jsonEncoder = JSONEncoder()
-    var httpClient = HTTPClientSpy()
+    var httpClientSpy = HTTPClientSpy()
     lazy var sut = MenuNetworker(
-        httpClient: httpClient,
+        httpClient: httpClientSpy,
         jsonDecoder: JSONDecoder()
     )
-    
-    let menuResponseStub = MenuResponse.stub()
-    var menuResponseData: Data {
-        try! jsonEncoder.encode(menuResponseStub)
+        
+    override func setUp() {
+        
     }
     
-    func test_getMenu() async throws {
-        httpClient.stubbedAsyncRequestResult = HTTPResponse(
-            response: HTTPURLResponse(),
-            body: menuResponseData
-        )
+    func test_getMenu_whenRequestSucceeds_returnsParsedResponse() async throws {
+        httpClientSpy.stubbedAsyncRequestResult = Value.successfulMenuResponse
         let menuResponse = try await sut.getMenu()
-        XCTAssertEqual(menuResponse, menuResponseStub)
+        XCTAssertEqual(menuResponse, Value.menuResponseStub)
+    }
+    
+    func test_getMenu_whenRequestFails_throwsError() async {
+        httpClientSpy.stubbedAsyncRequestError = URLError(.badURL)
+        await AssertThrowsAsyncError(try await sut.getMenu()) { error in
+            XCTAssertEqual(error as? URLError, httpClientSpy.stubbedAsyncRequestError as? URLError)
+        }
+    }
+    
+    enum Value {
+        static var menuResponseStub = MenuResponse.stub()
+        static var successfulMenuResponse: HTTPResponse {
+            HTTPResponse(
+                response: HTTPURLResponse(),
+                body: try! JSONEncoder().encode(menuResponseStub)
+            )
+        }
     }
 }
 
@@ -55,7 +68,7 @@ extension MenuResponse.ProductResponse {
             allAttributes: [
                 MenuResponse.AttributeResponse(
                     key: "tamanho",
-                    description: "Tamanho"
+                    name: "Tamanho"
                 )
             ]
         )
