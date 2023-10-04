@@ -1,4 +1,5 @@
 import SwiftUI
+import Core
 
 public struct MenuView: View {
     @State var searchQuery = ""
@@ -30,10 +31,10 @@ public struct MenuView: View {
 }
 
 struct MenuItemView: View {
-    var image: ImageKind
+    var image: CoreImage
     var title: String
     var description: String
-    
+
     var body: some View {
         HStack {
             image
@@ -67,36 +68,6 @@ struct MenuItem: Identifiable, Hashable {
             description: "Dose dupla de expresso com leite vaporizado"
         ),
     ]
-}
-
-enum ImageKind: View, Hashable {
-    case image(Image)
-    case url(URL)
-    case system(String)
-    
-    var body: some View {
-        switch self {
-        case .image(let image):
-            image
-                .resizable()
-        case .url(let url):
-            AsyncImage(url: url)
-        case .system(let systemName):
-            Image(systemName: systemName)
-                .resizable()
-        }
-    }
-    
-    func hash(into hasher: inout Hasher) {
-        switch self {
-        case .image(let image):
-            hasher.combine(String(describing: image))
-        case .url(let url):
-            hasher.combine(url)
-        case .system(let systemName):
-            hasher.combine(systemName)
-        }
-    }
 }
 
 struct MenuView_Previews: PreviewProvider {
