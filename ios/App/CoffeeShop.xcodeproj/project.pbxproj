@@ -10,9 +10,10 @@
 		6BC14EFC2AC777B3000ADFEC /* CoffeeShopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC14EFB2AC777B3000ADFEC /* CoffeeShopApp.swift */; };
 		6BC14F002AC777B7000ADFEC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BC14EFF2AC777B7000ADFEC /* Assets.xcassets */; };
 		6BC14F032AC777B7000ADFEC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BC14F022AC777B7000ADFEC /* Preview Assets.xcassets */; };
-		6BF6EF872AC77CFE007C655C /* CoffeeShopUI in Frameworks */ = {isa = PBXBuildFile; productRef = 6BF6EF862AC77CFE007C655C /* CoffeeShopUI */; };
 		6BF6EF892AC77CFE007C655C /* HTTP in Frameworks */ = {isa = PBXBuildFile; productRef = 6BF6EF882AC77CFE007C655C /* HTTP */; };
 		6BF6EF8C2AC7A4B5007C655C /* Resourceful in Frameworks */ = {isa = PBXBuildFile; productRef = 6BF6EF8B2AC7A4B5007C655C /* Resourceful */; };
+		6BF6EF902ACCE649007C655C /* Menu in Frameworks */ = {isa = PBXBuildFile; productRef = 6BF6EF8F2ACCE649007C655C /* Menu */; };
+		6BF6EF922ACCFFD8007C655C /* Core in Frameworks */ = {isa = PBXBuildFile; productRef = 6BF6EF912ACCFFD8007C655C /* Core */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -20,9 +21,9 @@
 		6BC14EFB2AC777B3000ADFEC /* CoffeeShopApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeShopApp.swift; sourceTree = "<group>"; };
 		6BC14EFF2AC777B7000ADFEC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		6BC14F022AC777B7000ADFEC /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
-		6BC14F262AC77945000ADFEC /* SwiftHTTP */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = SwiftHTTP; path = ../Modules/SwiftHTTP; sourceTree = "<group>"; };
-		6BF6EF842AC77B67007C655C /* CoffeeShopUI */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = CoffeeShopUI; path = ../Modules/CoffeeShopUI; sourceTree = "<group>"; };
+		6BC14F262AC77945000ADFEC /* HTTP */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = HTTP; path = ../Modules/HTTP; sourceTree = "<group>"; };
 		6BF6EF8D2AC7A4EA007C655C /* Core */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Core; path = ../Modules/Core; sourceTree = "<group>"; };
+		6BF6EF8E2AC7A896007C655C /* Menu */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Menu; path = ../Modules/Menu; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -31,8 +32,9 @@
 			buildActionMask = 2147483647;
 			files = (
 				6BF6EF892AC77CFE007C655C /* HTTP in Frameworks */,
+				6BF6EF922ACCFFD8007C655C /* Core in Frameworks */,
+				6BF6EF902ACCE649007C655C /* Menu in Frameworks */,
 				6BF6EF8C2AC7A4B5007C655C /* Resourceful in Frameworks */,
-				6BF6EF872AC77CFE007C655C /* CoffeeShopUI in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,9 +80,9 @@
 		6BC14F252AC77945000ADFEC /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				6BF6EF8E2AC7A896007C655C /* Menu */,
 				6BF6EF8D2AC7A4EA007C655C /* Core */,
-				6BF6EF842AC77B67007C655C /* CoffeeShopUI */,
-				6BC14F262AC77945000ADFEC /* SwiftHTTP */,
+				6BC14F262AC77945000ADFEC /* HTTP */,
 			);
 			name = Packages;
 			sourceTree = "<group>";
@@ -109,9 +111,10 @@
 			);
 			name = CoffeeShop;
 			packageProductDependencies = (
-				6BF6EF862AC77CFE007C655C /* CoffeeShopUI */,
 				6BF6EF882AC77CFE007C655C /* HTTP */,
 				6BF6EF8B2AC7A4B5007C655C /* Resourceful */,
+				6BF6EF8F2ACCE649007C655C /* Menu */,
+				6BF6EF912ACCFFD8007C655C /* Core */,
 			);
 			productName = CoffeeShop;
 			productReference = 6BC14EF82AC777B3000ADFEC /* CoffeeShop.app */;
@@ -384,10 +387,6 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
-		6BF6EF862AC77CFE007C655C /* CoffeeShopUI */ = {
-			isa = XCSwiftPackageProductDependency;
-			productName = CoffeeShopUI;
-		};
 		6BF6EF882AC77CFE007C655C /* HTTP */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = HTTP;
@@ -396,6 +395,14 @@
 			isa = XCSwiftPackageProductDependency;
 			package = 6BF6EF8A2AC7A4B5007C655C /* XCRemoteSwiftPackageReference "Resourceful" */;
 			productName = Resourceful;
+		};
+		6BF6EF8F2ACCE649007C655C /* Menu */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Menu;
+		};
+		6BF6EF912ACCFFD8007C655C /* Core */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Core;
 		};
 /* End XCSwiftPackageProductDependency section */
 	};

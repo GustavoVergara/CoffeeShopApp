@@ -19,16 +19,23 @@
   "testTargets" : [
     {
       "target" : {
-        "containerPath" : "container:..\/Modules\/CoffeeShopUI",
-        "identifier" : "CoffeeShopUITests",
-        "name" : "CoffeeShopUITests"
+        "containerPath" : "container:..\/Modules\/Core",
+        "identifier" : "CoreTests",
+        "name" : "CoreTests"
       }
     },
     {
       "target" : {
-        "containerPath" : "container:..\/Modules\/SwiftHTTP",
+        "containerPath" : "container:..\/Modules\/HTTP",
         "identifier" : "HTTPTests",
         "name" : "HTTPTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/Modules\/Menu",
+        "identifier" : "MenuTests",
+        "name" : "MenuTests"
       }
     }
   ],

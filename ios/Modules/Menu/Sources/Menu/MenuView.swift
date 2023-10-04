@@ -1,11 +1,13 @@
 import SwiftUI
 
-public struct ContentView: View {
+public struct MenuView: View {
     @State var searchQuery = ""
     @State var selectedMenuItem: MenuItem?
     @State var navPath = NavigationPath()
     
-    public init() {}
+    public init() {
+        
+    }
 
     public var body: some View {
         NavigationStack(path: $navPath) {
@@ -97,8 +99,8 @@ enum ImageKind: View, Hashable {
     }
 }
 
-struct ContentView_Previews: PreviewProvider {
+struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
-        ContentView()
+        MenuView()
     }
 }

@@ -6,13 +6,13 @@
 //
 
 import SwiftUI
-import CoffeeShopUI
+import Menu
 
 @main
 struct CoffeeShopApp: App {
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            MenuView()
         }
     }
 }

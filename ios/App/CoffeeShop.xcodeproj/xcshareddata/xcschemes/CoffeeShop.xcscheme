@@ -28,10 +28,10 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CoffeeShopUITests"
-               BuildableName = "CoffeeShopUITests"
-               BlueprintName = "CoffeeShopUITests"
-               ReferencedContainer = "container:../Modules/CoffeeShopUI">
+               BlueprintIdentifier = "HTTPTests"
+               BuildableName = "HTTPTests"
+               BlueprintName = "HTTPTests"
+               ReferencedContainer = "container:../Modules/HTTP">
             </BuildableReference>
          </BuildActionEntry>
          <BuildActionEntry
@@ -42,10 +42,10 @@
             buildForAnalyzing = "NO">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "HTTPTests"
-               BuildableName = "HTTPTests"
-               BlueprintName = "HTTPTests"
-               ReferencedContainer = "container:../Modules/SwiftHTTP">
+               BlueprintIdentifier = "MenuTests"
+               BuildableName = "MenuTests"
+               BlueprintName = "MenuTests"
+               ReferencedContainer = "container:../Modules/Menu">
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>
@@ -61,28 +61,6 @@
             default = "YES">
          </TestPlanReference>
       </TestPlans>
-      <Testables>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "CoffeeShopUITests"
-               BuildableName = "CoffeeShopUITests"
-               BlueprintName = "CoffeeShopUITests"
-               ReferencedContainer = "container:../Modules/CoffeeShopUI">
-            </BuildableReference>
-         </TestableReference>
-         <TestableReference
-            skipped = "NO">
-            <BuildableReference
-               BuildableIdentifier = "primary"
-               BlueprintIdentifier = "HTTPTests"
-               BuildableName = "HTTPTests"
-               BlueprintName = "HTTPTests"
-               ReferencedContainer = "container:../Modules/SwiftHTTP">
-            </BuildableReference>
-         </TestableReference>
-      </Testables>
    </TestAction>
    <LaunchAction
       buildConfiguration = "Debug"
