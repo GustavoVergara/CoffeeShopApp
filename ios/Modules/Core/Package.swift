@@ -10,6 +10,9 @@ let package = Package(
         .library(
             name: "Core",
             targets: ["Core"]),
+        .library(
+            name: "CoreTestKit",
+            targets: ["CoreTestKit"])
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
@@ -22,6 +25,9 @@ let package = Package(
         .target(
             name: "Core",
             dependencies: ["Resourceful"]),
+        .target(
+            name: "CoreTestKit",
+            dependencies: ["Core"]),
         .testTarget(
             name: "CoreTests",
             dependencies: ["Core"]),
