@@ -12,7 +12,12 @@ public enum CoreImage: View, Hashable {
             image
                 .resizable()
         case .url(let url):
-            AsyncImage(url: url)
+            AsyncImage(url: url) { image in
+                image.resizable()
+            } placeholder: {
+                ProgressView()
+            }
+
         case .system(let systemName):
             Image(systemName: systemName)
                 .resizable()
