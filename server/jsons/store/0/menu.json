@@ -6,7 +6,7 @@
             "id": "espresso",
             "name": "Espresso",
             "description": "Café feito com agua quente sob pressão.",
-            "photo": "https://globalassets.starbucks.com/digitalassets/products/bev/SBX20190617_Espresso_Single.jpg?impolicy=1by1_wide_topcrop_630",
+            "photo": "http://localhost:5000/static/ExpressoSingle.png",
             "skus": [
                 {
                     "id": "espresso-d",
@@ -34,7 +34,7 @@
             "id": "capp",
             "name": "Cappuccino",
             "description": "Feito com leite espumado e café espresso. Contem Gluten e Lactose.",
-            "photo": "https://globalassets.starbucks.com/digitalassets/products/bev/SBX20190617_Cappuccino.jpg?impolicy=1by1_wide_topcrop_630",
+            "photo": "http://localhost:5000/static/Cappuccino.png",
             "skus": [
                 {
                     "id": "capp-g",
@@ -69,7 +69,7 @@
             "id": "flat-white",
             "name": "Flat white",
             "description": "Feito com leite e café espresso. Contem Gluten e Lactose.",
-            "photo": "https://globalassets.starbucks.com/digitalassets/products/bev/SBX20230406_FlatWhite.jpg?impolicy=1by1_wide_topcrop_630",
+            "photo": "http://localhost:5000/static/FlatWhite.png",
             "skus": [
                 {
                     "id": "flat-white-g",

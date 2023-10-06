@@ -25,6 +25,8 @@ app.get("/store/:storeID/menu", (request, response) => {
 //   }
 // })
 
+app.use('/static', express.static(path.join(__dirname, 'public')))
+
 app.listen(port, () => {
   console.log(`Server running at port ${port}`);
 })
