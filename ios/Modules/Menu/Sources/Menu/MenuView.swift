@@ -7,11 +7,6 @@ struct MenuView: View {
     
     @State var searchQuery = ""
     @State var navPath = NavigationPath()
-    
-    init(interactor: MenuInteracting, viewModel: MenuViewModel) {
-        self.interactor = interactor
-        _viewModel = StateObject(wrappedValue: viewModel)
-    }
 
     var body: some View {
         NavigationStack(path: $navPath) {
@@ -67,9 +62,6 @@ struct MenuProductListView: View {
                 description: menuItem.description
             )
         }
-//        .refreshable {
-//            await interactor.didAppear()
-//        }
     }
 }
 
