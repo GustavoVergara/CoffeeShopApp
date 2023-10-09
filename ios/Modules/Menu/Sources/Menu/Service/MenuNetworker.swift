@@ -10,7 +10,10 @@ class MenuNetworker: MenuNetworking {
     let jsonDecoder: JSONDecoder
     
     init(
-        httpClient: HTTPClientProtocol = HTTPClient(logger: HTTPLogger(level: .outgoing)),
+        httpClient: HTTPClientProtocol = HTTPClient(
+            urlSession: URLSession(configuration: .ephemeral),
+            logger: HTTPLogger(level: .outgoing)
+        ),
         jsonDecoder: JSONDecoder = JSONDecoder()
     ) {
         self.httpClient = httpClient

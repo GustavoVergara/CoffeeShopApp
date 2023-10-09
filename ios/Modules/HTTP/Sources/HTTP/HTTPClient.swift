@@ -32,10 +32,12 @@ public struct HTTPClient: HTTPClientProtocol {
     }
     
     public init(
+        urlSession: URLSession = URLSession.shared,
         logger: HTTPLoggerProtocol = HTTPLogger(level: .none)
     ) {
-        self = HTTPClient(routeMapper: RouteMapper(),
-                         logger: logger)
+        self = HTTPClient(urlSession: urlSession,
+                          routeMapper: RouteMapper(),
+                          logger: logger)
     }
     
     public func request(_ route: HTTPRoute, returnQueue: DispatchQueue?, completion: @escaping (HTTPResult) -> Void) {

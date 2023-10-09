@@ -1,32 +1,75 @@
 import SwiftUI
 import Core
 
-public struct MenuView: View {
+struct MenuView: View {
+    let interactor: MenuInteracting
+    @StateObject var viewModel: MenuViewModel
+    
     @State var searchQuery = ""
-    @State var selectedMenuItem: MenuItem?
     @State var navPath = NavigationPath()
     
-    public init() {
-        
+    init(interactor: MenuInteracting, viewModel: MenuViewModel) {
+        self.interactor = interactor
+        _viewModel = StateObject(wrappedValue: viewModel)
     }
 
-    public var body: some View {
+    var body: some View {
         NavigationStack(path: $navPath) {
-            List(MenuItem.mockedItems) { menuItem in
-                MenuItemView(
-                    image: menuItem.image,
-                    title: menuItem.title,
-                    description: menuItem.description
-                ).onTapGesture {
-                    if let selectedMenuItem, selectedMenuItem == menuItem {
-                        self.selectedMenuItem = nil
-                    } else {
-                        selectedMenuItem = menuItem
-                    }
+            switch viewModel.state {
+            case .loading:
+                ProgressView()
+            case .loaded(let viewData):
+                MenuProductListView(items: filterItems(viewData.items))
+                    .searchable(text: $searchQuery)
+                    .navigationTitle(viewData.storeName)
+            case .failed:
+                ScrollView {
+                    Color.red
                 }
             }
-            .searchable(text: $searchQuery)
         }
+        .refreshable {
+            await interactor.didAppear()
+        }
+        .task {
+            await interactor.didAppear()
+        }
+    }
+    
+    private var title: String {
+        switch viewModel.state {
+        case .loading:
+            return "Carregando..."
+        case .failed:
+            return "Erro"
+        case .loaded(let menu):
+            return menu.storeName
+        }
+    }
+    
+    private func filterItems(_ items: [MenuItemViewData]) -> [MenuItemViewData] {
+        guard searchQuery.isEmpty == false else {
+            return items
+        }
+        let query = searchQuery.lowercased()
+        return items.filter { $0.name.lowercased().contains(query) || $0.description.lowercased().contains(query) }
+    }
+}
+
+struct MenuProductListView: View {
+    var items: [MenuItemViewData]
+    
+    var body: some View {
+        List(items) { menuItem in
+            MenuItemView(
+                image: menuItem.imageURL.map { CoreImage.url($0) } ?? .system("cup.and.saucer.fill"),
+                title: menuItem.name,
+                description: menuItem.description
+            )
+        }
+//        .refreshable {
+//            await interactor.didAppear()
+//        }
     }
 }
 
@@ -50,28 +93,11 @@ struct MenuItemView: View {
 
 }
 
-struct MenuItem: Identifiable, Hashable {
-    var id: String = UUID().uuidString
-    var image: ImageKind
-    var title: String
-    var description: String
-    
-    static var mockedItems: [MenuItem] = [
-        MenuItem(
-            image: .system("cup.and.saucer.fill"),
-            title: "Flat white",
-            description: "Dose dupla de expresso com leite vaporizado"
-        ),
-        MenuItem(
-            image: .system("cup.and.saucer"),
-            title: "Cappuchino",
-            description: "Dose dupla de expresso com leite vaporizado"
-        ),
-    ]
-}
-
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
-        MenuView()
+        MenuBuilder.build()
+            .previewDisplayName("Live")
+        MenuBuilder().buildPreview()
+            .previewDisplayName("Mocked")
     }
 }

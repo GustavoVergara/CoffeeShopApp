@@ -12,7 +12,7 @@ import Menu
 struct CoffeeShopApp: App {
     var body: some Scene {
         WindowGroup {
-            MenuView()
+            MenuBuilder.build()
         }
     }
 }

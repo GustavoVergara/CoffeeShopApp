@@ -1,23 +1,26 @@
 import Foundation
 import HTTP
 
-public struct MenuInteractor {
-    public private(set) var text = "Hello, World!"
-    
-    let menuNetworker = MenuNetworker(
-        httpClient: HTTPClient(),
-        jsonDecoder: JSONDecoder()
-    )
+protocol MenuInteracting {
+    func didAppear() async
+}
 
-    public init() {
+class MenuInteractor: MenuInteracting {
+    let presenter: MenuPresenting
+    let menuNetworker: MenuNetworking
+
+    init(presenter: MenuPresenting, menuNetworker: MenuNetworking = MenuNetworker()) {
+        self.presenter = presenter
+        self.menuNetworker = menuNetworker
     }
     
-    public func didAppear() {
-        Task {
-            let menuResponse = try? await menuNetworker.getMenu()
-            if let menu = menuResponse {
-                print("Got menu for store with id: '\(menu.storeID)'")
-            }
+    func didAppear() async {
+        await presenter.presentLoading()
+        do {
+            let menuResponse = try await menuNetworker.getMenu()
+            await presenter.presentMenu(menuResponse)
+        } catch {
+            await presenter.presentError(error)
         }
     }
 }
