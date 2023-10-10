@@ -6,17 +6,19 @@ struct MenuView: View {
     @StateObject var viewModel: MenuViewModel
     
     @State var searchQuery = ""
-    @State var navPath = NavigationPath()
 
     var body: some View {
-        NavigationStack(path: $navPath) {
+        NavigationStack(path: $viewModel.presentedProducts) {
             switch viewModel.state {
             case .loading:
                 ProgressView()
             case .loaded(let viewData):
-                MenuProductListView(items: filterItems(viewData.items))
+                MenuProductListView(items: filterItems(viewData.items), interactor: interactor)
                     .searchable(text: $searchQuery)
                     .navigationTitle(viewData.storeName)
+                    .navigationDestination(for: ProductResponse.self) { productResponse in
+                        ProductDetailBuilder.shared.build(product: productResponse)
+                    }
             case .failed:
                 ScrollView {
                     Color.red
@@ -53,14 +55,20 @@ struct MenuView: View {
 
 struct MenuProductListView: View {
     var items: [MenuItemViewData]
+    let interactor: MenuInteracting
     
     var body: some View {
         List(items) { menuItem in
-            MenuItemView(
-                image: menuItem.imageURL.map { CoreImage.url($0) } ?? .system("cup.and.saucer.fill"),
-                title: menuItem.name,
-                description: menuItem.description
-            )
+            Button {
+                interactor.didSelectItem(id: menuItem.id)
+            } label: {
+                MenuItemView(
+                    image: menuItem.imageURL.map { CoreImage.url($0) } ?? .system("cup.and.saucer.fill"),
+                    title: menuItem.name,
+                    description: menuItem.description,
+                    price: menuItem.price
+                )
+            }.buttonStyle(.plain)
         }
     }
 }
@@ -69,6 +77,7 @@ struct MenuItemView: View {
     var image: CoreImage
     var title: String
     var description: String
+    var price: String
 
     var body: some View {
         HStack {
@@ -79,6 +88,7 @@ struct MenuItemView: View {
                 Text(title)
                     .font(.system(size: 18, weight: .bold))
                 Text(description)
+                Text(price).bold()
             }
         }
     }

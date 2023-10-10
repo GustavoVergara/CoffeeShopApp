@@ -4,20 +4,15 @@ protocol MenuPresenting {
     func presentLoading() async
     func presentMenu(_ menu: MenuResponse) async
     func presentError(_ error: Error) async
+    func presentProduct(_ product: ProductResponse)
 }
 
 class MenuViewModel: ObservableObject, MenuPresenting {
     @Published
     var state: MenuViewState = .loading
     
-    private let formatter: NumberFormatter = {
-        let formatter = NumberFormatter()
-        formatter.alwaysShowsDecimalSeparator = true
-        formatter.minimumFractionDigits = 2
-        formatter.maximumFractionDigits = 2
-        formatter.currencySymbol = "R$"
-        return formatter
-    }()
+    @Published
+    var presentedProducts = [ProductResponse]()
     
     @MainActor
     func presentLoading() async {
@@ -33,7 +28,7 @@ class MenuViewModel: ObservableObject, MenuPresenting {
                 name: product.name,
                 description: product.description,
                 imageURL: product.photo.flatMap { URL(string: $0) },
-                price: priceText(forProduct: product)
+                price: product.displayPrice()
             )
         }
         let viewData = MenuViewData(storeName: menu.storeName, items: items)
@@ -45,28 +40,11 @@ class MenuViewModel: ObservableObject, MenuPresenting {
         state = .failed
     }
     
-    private func priceText(forProduct product: MenuResponse.ProductResponse) -> String {
-        var minPrice: Double?
-        var hasHigherPrices = false
-        for sku in product.skus {
-            guard let currentMinPrice = minPrice, currentMinPrice != sku.price else {
-                minPrice = sku.price
-                continue
-            }
-            
-            minPrice = min(currentMinPrice, sku.price)
-            hasHigherPrices = true
-        }
-        
-        guard let minPrice else {
-            return "??"
-        }
-        
-        if hasHigherPrices {
-            return "apartir de \(formatter.string(for: minPrice) ?? "??")"
-        } else {
-            return formatter.string(for: minPrice) ?? "??"
-        }
+    // Might make more sense to change this to something like `updatePresentedProducts(_ products: [ProductResponse])`
+    // in order to have the control of the stack handled by a `MenuRouter`.
+    // Might even make sense to have the `presentedProducts` be a stream that is emitted by the Router instead of a direct call.
+    func presentProduct(_ product: ProductResponse) {
+        presentedProducts.append(product)
     }
 }
 
