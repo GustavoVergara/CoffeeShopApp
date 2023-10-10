@@ -1,4 +1,6 @@
 import SwiftUI
+import Combine
+import Collections
 import Core
 
 protocol ProductDetailInteracting: AnyObject {
@@ -28,6 +30,17 @@ final class ProductDetailViewModel: ObservableObject, ProductDetailInteracting {
         self.customizationSections = customizationSections
     }
     
+    convenience init(product: ProductResponse) {
+        self.init(
+            id: product.id,
+            name: product.name,
+            description: product.description,
+            image: product.photo.flatMap { URL(string: $0) }.map { CoreImage.url($0) },
+            price: product.displayPrice(),
+            customizationSections: Self.mapSectionsFromProduct(product)
+        )
+    }
+    
     func selectCustomization(_ customizationID: String, inSection sectionID: String) {
         guard let sectionIndex = customizationSections.firstIndex(where: { $0.id == sectionID }) else {
             return
@@ -44,6 +57,39 @@ final class ProductDetailViewModel: ObservableObject, ProductDetailInteracting {
         customizationSections[sectionIndex] = section
     }
     
+    static func mapSectionsFromProduct(_ product: ProductResponse) -> [CustomizationSection] {
+        guard let basePrice = product.basePrice() else {
+            return []
+        }
+        
+        var sections = product.allAttributes.reduce(into: OrderedDictionary<String, CustomizationSection>()) { partialResult, attribute in
+            partialResult[attribute.key] = CustomizationSection(id: attribute.key, title: attribute.name, options: [])
+        }
+        
+        for sku in product.skus {
+            attributeLoop: for attributeKV in sku.attributes {
+                guard var section = sections[attributeKV.key] else { continue }
+                let additionalPrice = sku.price - basePrice
+                
+                for (existingOptionIndex, existingOption) in section.options.enumerated() where existingOption.name == attributeKV.value {
+                    if existingOption.additionalPrice < additionalPrice {
+                        continue attributeLoop
+                    } else {
+                        section.options.remove(at: existingOptionIndex)
+                        break
+                    }
+                }
+                
+                section.options.append(Customization(name: attributeKV.value,
+                                                     additionalPrice: additionalPrice,
+                                                     isSelected: false))
+                sections[attributeKV.key] = section
+            }
+        }
+        
+        return sections.values.filter { !$0.options.isEmpty }
+    }
+    
     struct CustomizationSection: Identifiable, Hashable {
         var id: String
         var title: String
@@ -51,71 +97,13 @@ final class ProductDetailViewModel: ObservableObject, ProductDetailInteracting {
     }
     
     struct Customization: Identifiable, Hashable {
-        var id: String
+        var id: String { name }
         var name: String
-        var price: String
+        var additionalPrice: Double
         var isSelected: Bool
+        
+        var displayAdditionalPrice: String {
+            additionalPrice > 0 ? "+\(NumberFormatter.brlCurrencyFormatter.string(for: additionalPrice) ?? "??")" : ""
+        }
     }
-    
-    static let preview = ProductDetailViewModel(
-        id: "preview-product",
-        name: "Cappuccino (Preview)",
-        description: "(Preview) Feito com leite espresso e espuma de leite.",
-        image: R.image.cappuccino(),
-        price: "a partir de R$ 10,00",
-        customizationSections: [
-            CustomizationSection(
-                id: "preview-tamanho",
-                title: "Tamanho",
-                options: [
-                    Customization(
-                        id: "preview-custom-p",
-                        name: "Pequeno",
-                        price: "R$ 10",
-                        isSelected: false),
-                    Customization(
-                        id: "preview-custom-m",
-                        name: "Médio",
-                        price: "R$ 12",
-                        isSelected: false),
-                    Customization(
-                        id: "preview-custom-g",
-                        name: "Grande",
-                        price: "R$ 14",
-                        isSelected: false)
-                ]
-            ),
-            CustomizationSection(
-                id: "preview-adocante",
-                title: "Adoçar?",
-                options: [
-                    Customization(
-                        id: "preview-custom-sem",
-                        name: "Sem Açucar",
-                        price: "",
-                        isSelected: false),
-                    Customization(
-                        id: "preview-custom-mascavo",
-                        name: "Açucar Mascavo",
-                        price: "",
-                        isSelected: false),
-                    Customization(
-                        id: "preview-custom-baunilha",
-                        name: "Açucar de Baunilha",
-                        price: "",
-                        isSelected: false),
-                    Customization(
-                        id: "preview-custom-cristal",
-                        name: "Açucar Cristal",
-                        price: "",
-                        isSelected: false),
-                    Customization(
-                        id: "preview-custom-sucralose",
-                        name: "Sucralose",
-                        price: "",
-                        isSelected: false)
-                ]
-            )
-        ]
-    )
 }

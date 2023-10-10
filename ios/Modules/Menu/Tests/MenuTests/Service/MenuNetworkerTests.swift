@@ -51,22 +51,22 @@ extension MenuResponse {
     }
 }
 
-extension MenuResponse.ProductResponse {
-    static func stub(id: String = "0", name: String = "") -> MenuResponse.ProductResponse {
-        MenuResponse.ProductResponse(
+extension ProductResponse {
+    static func stub(id: String = "0", name: String = "") -> ProductResponse {
+        ProductResponse(
             id: id,
             name: name,
             description: "Description",
             photo: "",
             skus: [
-                MenuResponse.SKUResponse(
+                SKUResponse(
                     id: "1",
                     price: 8.3,
                     attributes: ["tamanho": "Grande"]
                 )
             ],
             allAttributes: [
-                MenuResponse.AttributeResponse(
+                AttributeResponse(
                     key: "tamanho",
                     name: "Tamanho"
                 )

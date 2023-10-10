@@ -2,7 +2,6 @@ import SwiftUI
 import Core
 
 struct ProductDetailView: View {
-    var interactor: ProductDetailInteracting
     @StateObject var viewModel: ProductDetailViewModel
     
     var body: some View {
@@ -20,6 +19,8 @@ struct ProductDetailView: View {
             }.headerProminence(.increased)
             .listStyle(.plain)
             .ignoresSafeArea(.container, edges: .top)
+            .navigationBarTitleDisplayMode(.inline)
+            .toolbarBackground(.hidden, for: .navigationBar)
     }
     
     var header: some View {
@@ -44,19 +45,19 @@ struct ProductDetailView: View {
     
     func customizationOption(_ option: ProductDetailViewModel.Customization, sectionID: String) -> some View {
         Button {
-            interactor.selectCustomization(option.id, inSection: sectionID)
+            viewModel.selectCustomization(option.id, inSection: sectionID)
         } label: {
             HStack {
                 VStack(alignment: .leading) {
                     Text(option.name)
-                    if !option.price.isEmpty {
-                        Text(option.price)
+                    if option.additionalPrice > 0 {
+                        Text(option.displayAdditionalPrice)
+                            .fontWeight(.semibold)
                     }
                 }
                 Spacer()
                 checkmark(isOn: option.isSelected)
             }
-
         }
     }
     
@@ -77,9 +78,8 @@ struct ProductDetailView: View {
 
 struct ProductDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        ProductDetailBuilder.shared.build()
-            .previewDisplayName("Live")
-        ProductDetailBuilder.shared.buildPreview()
-            .previewDisplayName("Mocked")
+        NavigationStack {
+            ProductDetailBuilder.shared.buildPreview()
+        }.previewDisplayName("Mocked")
     }
 }

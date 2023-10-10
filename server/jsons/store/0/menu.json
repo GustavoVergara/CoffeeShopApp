@@ -9,17 +9,35 @@
             "photo": "http://localhost:5000/static/ExpressoSingle.png",
             "skus": [
                 {
-                    "id": "espresso-d",
-                    "price": 8,
+                    "id": "espresso-s-sa",
+                    "price": 6,
                     "attributes": {
-                        "tamanho": "Duplo 120ml"
+                        "tamanho": "Curto 60ml",
+                        "adocante": "Sem Açucar"
                     }
                 },
                 {
-                    "id": "espresso-s",
-                    "price": 6,
+                    "id": "espresso-d-sa",
+                    "price": 8,
                     "attributes": {
-                        "tamanho": "Curto 60ml"
+                        "tamanho": "Duplo 120ml",
+                        "adocante": "Sem Açucar"
+                    }
+                },
+                {
+                    "id": "espresso-s-cab",
+                    "price": 7,
+                    "attributes": {
+                        "tamanho": "Curto 60ml",
+                        "adocante": "Açucar de Baunilha"
+                    }
+                },
+                {
+                    "id": "espresso-d-cab",
+                    "price": 9,
+                    "attributes": {
+                        "tamanho": "Duplo 120ml",
+                        "adocante": "Açucar de Baunilha"
                     }
                 }
             ],
@@ -27,6 +45,10 @@
                 {
                     "key": "tamanho",
                     "name": "Tamanho"
+                },
+                {
+                    "key": "adocante",
+                    "name": "Açucar"
                 }
             ]
         },
