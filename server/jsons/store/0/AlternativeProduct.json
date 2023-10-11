@@ -1,0 +1,32 @@
+{
+    "id": "capp",
+    "name": "Cappuccino",
+    "description": "Café espresso com leite espumado",
+    "photo": "http://localhost:5000/static/Cappuccino.png",
+    "basePrice": 10,
+    "variationGroups": [
+        {
+            "id": "tamanho",
+            "title": "Tamanho",
+            "minSelection": 1,
+            "maxSelection": 1,
+            "variations": [
+                {
+                    "id": "capp-tamanho-p",
+                    "name": "Pequeno 200ml",
+                    "additionalPrice": 0
+                },
+                {
+                    "id": "capp-tamanho-m",
+                    "name": "Médio 300ml",
+                    "additionalPrice": 2
+                },
+                {
+                    "id": "capp-tamanho-g",
+                    "name": "Grande 400ml",
+                    "additionalPrice": 4
+                }
+            ]
+        }
+    ]
+}
