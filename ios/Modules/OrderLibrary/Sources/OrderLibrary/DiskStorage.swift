@@ -2,6 +2,7 @@ import Foundation
 
 protocol CodableStoring {
     func object<T: Decodable>(_ type: T.Type, forKey key: String) -> T?
+    @discardableResult
     func store<T: Encodable>(_ obj: T, forKey key: String) -> Bool
     @discardableResult
     func removeObject(forKey key: String) -> Bool
