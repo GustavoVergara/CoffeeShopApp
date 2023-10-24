@@ -9,7 +9,6 @@
     }
   ],
   "defaultOptions" : {
-    "codeCoverage" : false,
     "targetForVariableExpansion" : {
       "containerPath" : "container:CoffeeShop.xcodeproj",
       "identifier" : "6BC14EF72AC777B3000ADFEC",
@@ -36,6 +35,13 @@
         "containerPath" : "container:..\/Modules\/Menu",
         "identifier" : "MenuTests",
         "name" : "MenuTests"
+      }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/Modules\/OrderLibrary",
+        "identifier" : "OrderLibraryTests",
+        "name" : "OrderLibraryTests"
       }
     }
   ],
