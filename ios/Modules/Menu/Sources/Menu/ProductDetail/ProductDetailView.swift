@@ -5,22 +5,26 @@ struct ProductDetailView: View {
     @StateObject var viewModel: ProductDetailViewModel
     
     var body: some View {
-            List {
-                header
-                    .listRowInsets(EdgeInsets())
-                    .listRowSeparator(.hidden)
-                ForEach(viewModel.customizationSections) { section in
-                    Section(section.title) {
-                        ForEach(section.options) { option in
-                            customizationOption(option, sectionID: section.id)
-                        }
+        List {
+            header
+                .listRowInsets(EdgeInsets())
+                .listRowSeparator(.hidden)
+            ForEach(viewModel.customizationSections) { section in
+                Section(section.title) {
+                    ForEach(section.options) { option in
+                        customizationOption(option, sectionID: section.id)
                     }
                 }
-            }.headerProminence(.increased)
-            .listStyle(.plain)
-            .ignoresSafeArea(.container, edges: .top)
-            .navigationBarTitleDisplayMode(.inline)
-            .toolbarBackground(.hidden, for: .navigationBar)
+            }
+        }.headerProminence(.increased)
+        .listStyle(.plain)
+        .ignoresSafeArea(.container, edges: .top)
+        .navigationBarTitleDisplayMode(.inline)
+        .toolbarBackground(.hidden, for: .navigationBar)
+        .safeAreaInset(edge: .bottom) {
+            AddToDraftOrderButton()
+                .fixedSize()
+        }
     }
     
     var header: some View {

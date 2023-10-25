@@ -2,12 +2,15 @@ import SwiftUI
 import Combine
 import Collections
 import Core
+import OrderLibrary
 
 protocol ProductDetailInteracting: AnyObject {
     func selectCustomization(_ customizationID: String, inSection sectionID: String)
 }
 
 final class ProductDetailViewModel: ObservableObject, ProductDetailInteracting {
+//    let draftOrderStore: DraftOrderStoring
+
     var id: String
     var name: String
     var description: String
@@ -16,12 +19,14 @@ final class ProductDetailViewModel: ObservableObject, ProductDetailInteracting {
     @Published
     var customizationSections: [CustomizationSection]
     
-    init(id: String,
+    init(//draftOrderStore: DraftOrderStoring,
+         id: String,
          name: String,
          description: String,
          image: any View,
          price: String,
          customizationSections: [ProductDetailViewModel.CustomizationSection]) {
+//        self.draftOrderStore = draftOrderStore
         self.id = id
         self.name = name
         self.description = description
@@ -30,8 +35,9 @@ final class ProductDetailViewModel: ObservableObject, ProductDetailInteracting {
         self.customizationSections = customizationSections
     }
     
-    convenience init(product: ProductResponse) {
+    convenience init(/*draftOrderStore: DraftOrderStoring, */product: ProductResponse) {
         self.init(
+//            draftOrderStore: draftOrderStore,
             id: product.id,
             name: product.name,
             description: product.description,
@@ -57,7 +63,7 @@ final class ProductDetailViewModel: ObservableObject, ProductDetailInteracting {
         customizationSections[sectionIndex] = section
     }
     
-    static func mapSectionsFromProduct(_ product: ProductResponse) -> [CustomizationSection] {
+    private static func mapSectionsFromProduct(_ product: ProductResponse) -> [CustomizationSection] {
         guard let basePrice = product.basePrice() else {
             return []
         }

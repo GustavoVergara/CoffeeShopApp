@@ -4,6 +4,6 @@ public extension R {
     enum color {}
 }
 
-extension R.color {
+public extension R.color {
     static let darkGreen = ColorResource(name: "DarkGreen", bundle: .module)
 }

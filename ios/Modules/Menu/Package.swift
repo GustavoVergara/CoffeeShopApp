@@ -16,6 +16,7 @@ let package = Package(
         // Dependencies declare other packages that this package depends on.
         .package(path: "Core"),
         .package(path: "HTTP"),
+        .package(path: "OrderLibrary"),
         .package(url: "https://github.com/GustavoVergara/Resourceful.git", branch: "main"),
         .package(url: "https://github.com/apple/swift-collections", from: "1.0.0"),
     ],
@@ -27,6 +28,7 @@ let package = Package(
             dependencies: [
                 "Core",
                 "HTTP",
+                "OrderLibrary",
                 "Resourceful",
                 .product(name: "Collections", package: "swift-collections"),
             ]),
