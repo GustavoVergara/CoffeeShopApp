@@ -8,32 +8,15 @@ struct ProductResponse: Codable, Identifiable, Hashable {
     var skus: [SKUResponse]
     var allAttributes: [AttributeResponse]
     
-    func basePrice() -> Double? {
+    var basePrice: Double? {
         skus.min(by: { $0.price < $1.price })?.price
     }
     
-    func displayPrice(formatter: NumberFormatter = NumberFormatter.brlCurrencyFormatter) -> String {
-        var minPrice: Double?
-        var hasHigherPrices = false
-        for sku in skus {
-            guard let currentMinPrice = minPrice, currentMinPrice != sku.price else {
-                minPrice = sku.price
-                continue
-            }
-            
-            minPrice = min(currentMinPrice, sku.price)
-            hasHigherPrices = true
+    var hasDifferentPrices: Bool {
+        guard let firstSKUPrice = skus.first?.price else {
+            return false
         }
-        
-        guard let minPrice else {
-            return "??"
-        }
-        
-        if hasHigherPrices {
-            return "apartir de \(formatter.string(for: minPrice) ?? "??")"
-        } else {
-            return formatter.string(for: minPrice) ?? "??"
-        }
+        return skus.dropFirst().contains(where: { $0.price != firstSKUPrice })
     }
     
     enum CodingKeys: String, CodingKey {

@@ -2,6 +2,7 @@ import SwiftUI
 import Core
 
 struct ProductDetailView: View {
+    var interactor: ProductDetailInteracting
     @StateObject var viewModel: ProductDetailViewModel
     
     var body: some View {
@@ -23,6 +24,7 @@ struct ProductDetailView: View {
         .toolbarBackground(.hidden, for: .navigationBar)
         .safeAreaInset(edge: .bottom) {
             AddToDraftOrderButton()
+                .shadow(radius: 4)
                 .fixedSize()
         }
     }
@@ -47,15 +49,15 @@ struct ProductDetailView: View {
         }
     }
     
-    func customizationOption(_ option: ProductDetailViewModel.Customization, sectionID: String) -> some View {
+    func customizationOption(_ option: ProductCustomization, sectionID: String) -> some View {
         Button {
-            viewModel.selectCustomization(option.id, inSection: sectionID)
+            interactor.selectCustomization(option.id, inSection: sectionID)
         } label: {
             HStack {
                 VStack(alignment: .leading) {
                     Text(option.name)
                     if option.additionalPrice > 0 {
-                        Text(option.displayAdditionalPrice)
+                        Text(option.displayAdditionalPrice())
                             .fontWeight(.semibold)
                     }
                 }

@@ -8,6 +8,7 @@ protocol MenuPresenting {
 }
 
 class MenuViewModel: ObservableObject, MenuPresenting {
+    let priceFormatter: PriceFormatting = PriceFormatter()
     @Published
     var state: MenuViewState = .loading
     
@@ -28,7 +29,7 @@ class MenuViewModel: ObservableObject, MenuPresenting {
                 name: product.name,
                 description: product.description,
                 imageURL: product.photo.flatMap { URL(string: $0) },
-                price: product.displayPrice()
+                price: priceFormatter.minimunDisplayPrice(in: product.skus)
             )
         }
         let viewData = MenuViewData(storeName: menu.storeName, items: items)
