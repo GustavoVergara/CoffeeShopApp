@@ -1,9 +1,10 @@
 import SwiftUI
 import Core
 
-struct ProductDetailView: View {
-    var interactor: ProductDetailInteracting
+struct ProductDetailView<AddToDraftOrderButtonBuild: AddToDraftOrderButtonBuilding>: View {
+    let interactor: ProductDetailInteracting
     @StateObject var viewModel: ProductDetailViewModel
+    let addToDraftOrderButtonBuilder: AddToDraftOrderButtonBuild
     
     var body: some View {
         List {
@@ -23,7 +24,7 @@ struct ProductDetailView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.hidden, for: .navigationBar)
         .safeAreaInset(edge: .bottom) {
-            AddToDraftOrderButton()
+            addToDraftOrderButtonBuilder.build()
                 .shadow(radius: 4)
                 .fixedSize()
         }

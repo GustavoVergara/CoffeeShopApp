@@ -2,15 +2,15 @@ import SwiftUI
 import Core
 
 struct AddToDraftOrderButton: View {
-    @State var counter: Int = 1
-    @State var price: String = "R$ 12,50"
-    
+    let interactor: AddToDraftOrderInteracting
+    @StateObject var viewModel: AddToDraftOrderButtonViewModel
+
     var body: some View {
         HStack {
             Spacer().frame(maxWidth: 8)
             counterView
             Color.white.frame(maxWidth: 1)
-            Button("Adicionar \(price)") {
+            Button("Adicionar \(viewModel.currentDisplayPrice)") {
                 print("Add product to DraftOrder")
             }
             .lineLimit(1)
@@ -28,16 +28,16 @@ struct AddToDraftOrderButton: View {
     private var counterView: some View {
         HStack(spacing: 0) {
             Button {
-                counter += 1
+                interactor.increaseQuantity()
             } label: {
                 Image(systemName: "plus.circle")
                     .padding(.vertical)
             }
-            Text("\(counter)")
+            Text("\(viewModel.selectedQuantity)")
                 .frame(minWidth: 20)
 //                .font(.system(size: 20, weight: .bold))
             Button {
-                counter -= 1
+                interactor.decreaseQuantity()
             } label: {
                 Image(systemName: "minus.circle")
                     .padding(.vertical)
@@ -48,7 +48,7 @@ struct AddToDraftOrderButton: View {
 
 struct AddToDraftOrderButton_Previews: PreviewProvider {
     static var previews: some View {
-        AddToDraftOrderButton()
+        AddToDraftOrderButtonBuilderPreview().build()
             .fixedSize()
             .previewLayout(.sizeThatFits)
     }

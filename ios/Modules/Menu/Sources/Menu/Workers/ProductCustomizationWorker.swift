@@ -19,23 +19,25 @@ final class ProductCustomizationWorker: ProductCustomizationWorking {
         priceFormatter.displayPrice(currentPrice)
     }
     
+    private let basePrice: Double
     private let priceFormatter: PriceFormatting
     
     init(priceFormatter: PriceFormatting = PriceFormatter(),
          customizationSections: [ProductCustomizationSection],
-         currentPrice: Double,
+         basePrice: Double,
          selectedQuantity: Int = 1) {
         self.priceFormatter = priceFormatter
         self.sections = customizationSections
         self.selectedQuantity = selectedQuantity
-        self.currentPrice = currentPrice
+        self.basePrice = basePrice
+        self.currentPrice = basePrice
     }
     
     convenience init(priceFormatter: PriceFormatting = PriceFormatter(), product: ProductResponse) {
         self.init(
             priceFormatter: priceFormatter,
             customizationSections: Self.mapSectionsFromProduct(product),
-            currentPrice: 0,
+            basePrice: product.basePrice ?? 0,
             selectedQuantity: 1
         )
     }
@@ -54,6 +56,7 @@ final class ProductCustomizationWorker: ProductCustomizationWorking {
             return modifiableOption
         }
         sections[sectionIndex] = section
+        currentPrice = basePrice + Self.minPrice(sections)
     }
     
     func increaseQuantity() {
@@ -98,6 +101,17 @@ final class ProductCustomizationWorker: ProductCustomizationWorking {
         return sections.values.filter { !$0.options.isEmpty }
     }
     
+    private static func minPrice(_ sections: [ProductCustomizationSection]) -> Double {
+        var price = 0.0
+        for section in sections {
+            for option in section.options {
+                if option.isSelected {
+                    price += option.additionalPrice
+                }
+            }
+        }
+        return price
+    }
 }
 
 struct ProductCustomizationSection: Identifiable, Hashable {

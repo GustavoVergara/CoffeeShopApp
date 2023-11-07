@@ -1,17 +1,31 @@
-import SwiftUI
-import Core
+//
+//  File.swift
+//  
+//
+//  Created by Gustavo Vergara on 07/11/23.
+//
 
-struct ProductDetailBuilder {
-    public static let shared = Self.init()
+import SwiftUI
+
+protocol AddToDraftOrderButtonBuilding {
+    associatedtype Content: View
+    func build() -> Content
+}
+
+struct AddToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilding {
+    let productCustomizationWorker: ProductCustomizationWorking
     
-    func build(product: ProductResponse) -> some View {
-        let customizationWorker = ProductCustomizationWorker(product: product)
-        let viewModel = ProductDetailViewModel(product: product, customizationSections: customizationWorker.sections)
-        let interactor = ProductDetailInteractor(productCustomizationWorker: customizationWorker, presenter: viewModel)
-        return ProductDetailView(interactor: interactor, viewModel: viewModel, addToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker))
+    func build() -> some View {
+        let viewModel = AddToDraftOrderButtonViewModel(currentDisplayPrice: productCustomizationWorker.currentDisplayPrice, selectedQuantity: productCustomizationWorker.selectedQuantity)
+        let interactor = AddToDraftOrderInteractor(productCustomizationWorker: productCustomizationWorker,
+                                                   presenter: viewModel)
+        return AddToDraftOrderButton(interactor: interactor, viewModel: viewModel)
     }
-    
-    func buildPreview() -> some View {
+}
+
+// MARK: - Preview
+struct AddToDraftOrderButtonBuilderPreview: AddToDraftOrderButtonBuilding {
+    func build() -> some View {
         let customizationWorker = ProductCustomizationWorker(
             customizationSections: [
                 ProductCustomizationSection(
@@ -61,23 +75,10 @@ struct ProductDetailBuilder {
             ],
             basePrice: 10
         )
-        
-        let viewModel = ProductDetailViewModel(
-            id: "preview-product",
-            name: "Cappuccino (Preview)",
-            description: "(Preview) Feito com leite espresso e espuma de leite.",
-            image: R.image.cappuccino(),
-            price: "a partir de R$ 10,00",
-            customizationSections: customizationWorker.sections
-        )
-        
-        let interactor = ProductDetailInteractor(productCustomizationWorker: customizationWorker, presenter: viewModel)
-        return ProductDetailView(interactor: interactor, viewModel: viewModel, addToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker))
+
+        let viewModel = AddToDraftOrderButtonViewModel(currentDisplayPrice: customizationWorker.currentDisplayPrice, selectedQuantity: customizationWorker.selectedQuantity)
+        let interactor = AddToDraftOrderInteractor(productCustomizationWorker: customizationWorker,
+                                                   presenter: viewModel)
+        return AddToDraftOrderButton(interactor: interactor, viewModel: viewModel)
     }
-}
-
-// MARK: Protocols
-
-protocol ProductDetailInteracting {
-    func selectCustomization(_ customizationID: String, inSection sectionID: String)
 }
