@@ -3,7 +3,7 @@ import Core
 
 struct AddToDraftOrderButton: View {
     let interactor: AddToDraftOrderInteracting
-    @StateObject var viewModel: AddToDraftOrderButtonViewModel
+    @ObservedObject var viewModel: AddToDraftOrderButtonViewModel
 
     var body: some View {
         HStack {

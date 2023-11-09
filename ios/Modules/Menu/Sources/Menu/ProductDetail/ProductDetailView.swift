@@ -3,7 +3,7 @@ import Core
 
 struct ProductDetailView<AddToDraftOrderButtonBuild: AddToDraftOrderButtonBuilding>: View {
     let interactor: ProductDetailInteracting
-    @StateObject var viewModel: ProductDetailViewModel
+    @ObservedObject var viewModel: ProductDetailViewModel
     let addToDraftOrderButtonBuilder: AddToDraftOrderButtonBuild
     
     var body: some View {
