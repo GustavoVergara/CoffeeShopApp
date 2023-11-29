@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import OrderLibrary
 
 protocol AddToDraftOrderButtonBuilding {
     associatedtype Content: View
@@ -15,14 +16,17 @@ protocol AddToDraftOrderButtonBuilding {
 struct AddToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilding {
     let productCustomizationWorker: ProductCustomizationWorking
     let productCustomizationStream: ProductCustomizationStreaming
+    let product: ProductResponse
 
     func build() -> some View {
         let viewModel = AddToDraftOrderButtonViewModel(currentPrice: productCustomizationStream.data?.currentPrice,
                                                        selectedQuantity: productCustomizationStream.data?.selectedQuantity ?? 1,
                                                        canAddToDraftOrder: true)
         let interactor = AddToDraftOrderInteractor(productCustomizationWorker: productCustomizationWorker,
+                                                   productCustomizationStream: productCustomizationStream,
+                                                   draftOrderStore: DraftOrderStore(),
                                                    presenter: viewModel,
-                                                   productCustomizationStream: productCustomizationStream)
+                                                   product: product)
         return AddToDraftOrderButton(interactor: interactor, viewModel: viewModel)
     }
 }
@@ -89,8 +93,10 @@ struct AddToDraftOrderButtonBuilderPreview: AddToDraftOrderButtonBuilding {
                                                        selectedQuantity: data.selectedQuantity,
                                                        canAddToDraftOrder: data.hasSelectedAllRequiredCustomizations)
         let interactor = AddToDraftOrderInteractor(productCustomizationWorker: customizationWorker,
+                                                   productCustomizationStream: stream,
+                                                   draftOrderStore: DraftOrderStore(),
                                                    presenter: viewModel,
-                                                   productCustomizationStream: stream)
+                                                   product: ProductResponse(id: "id", name: "name", description: "", skus: [], allAttributes: []))
         return AddToDraftOrderButton(interactor: interactor, viewModel: viewModel)
     }
 }

@@ -6,7 +6,6 @@ protocol ProductCustomizationWorking: AnyObject {
     func decreaseQuantity()
 }
 
-// TODO: Emit state changes to a stream so that all views can be updated, regardless of where the change was triggered from
 final class ProductCustomizationWorker: ProductCustomizationWorking {
     private let basePrice: Double
     private let stream: any MutableProductCustomizationStreaming

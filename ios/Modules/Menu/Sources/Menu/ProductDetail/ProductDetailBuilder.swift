@@ -7,11 +7,13 @@ struct ProductDetailBuilder {
     func build(product: ProductResponse) -> some View {
         let customizationStream = ProductCustomizationStream()
         let customizationWorker = ProductCustomizationWorker(productCustomizationStream: customizationStream, product: product)
+        let addToDraftOrderButtonBuilder = AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker, productCustomizationStream: customizationStream, product: product)
+        
         let viewModel = ProductDetailViewModel(product: product, customizationSections: customizationStream.data!.sections)
         let interactor = ProductDetailInteractor(productCustomizationWorker: customizationWorker, productCustomizationStream: customizationStream, presenter: viewModel)
         return ProductDetailView(interactor: interactor,
                                  viewModel: viewModel,
-                                 addToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker, productCustomizationStream: customizationStream))
+                                 addToDraftOrderButtonBuilder: addToDraftOrderButtonBuilder)
     }
     
     func buildPreview() -> some View {
@@ -66,6 +68,11 @@ struct ProductDetailBuilder {
             currentPrice: 10,
             hasSelectedAllRequiredCustomizations: false
         )
+        let product = ProductResponse(id: "preview-product",
+                                      name: "Cappuccino (Preview)",
+                                      description: "(Preview) Feito com leite espresso e espuma de leite.",
+                                      skus: [],
+                                      allAttributes: [])
         
         let stream = ProductCustomizationStream()
         stream.emit(data)
@@ -75,9 +82,9 @@ struct ProductDetailBuilder {
         )
         
         let viewModel = ProductDetailViewModel(
-            id: "preview-product",
-            name: "Cappuccino (Preview)",
-            description: "(Preview) Feito com leite espresso e espuma de leite.",
+            id: product.id,
+            name: product.name,
+            description: product.description,
             image: R.image.cappuccino(),
             price: "a partir de R$ 10,00",
             customizationSections: data.sections
@@ -87,7 +94,7 @@ struct ProductDetailBuilder {
         return ProductDetailView(
             interactor: interactor,
             viewModel: viewModel,
-            addToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker, productCustomizationStream: stream)
+            addToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker, productCustomizationStream: stream, product: product)
         )
     }
 }
