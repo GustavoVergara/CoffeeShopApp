@@ -8,14 +8,21 @@ struct ProductCustomizationData {
     var hasSelectedAllRequiredCustomizations: Bool
 }
 
-protocol ProductCustomizationStreaming: Streaming where Output == ProductCustomizationData {}
-protocol MutableProductCustomizationStreaming: ProductCustomizationStreaming, MutableStreaming where Output == ProductCustomizationData {}
+protocol ProductCustomizationStreaming {
+    var data: ProductCustomizationData? { get }
+    
+    func publisher() -> any Publisher<ProductCustomizationData, Never>
+}
 
-final class ProductCustomizationStream: MutableProductCustomizationStreaming {
+protocol MutableProductCustomizationStreaming: ProductCustomizationStreaming {
+    func emit(_ data: ProductCustomizationData)
+}
+
+final class ProductCustomizationStream: MutableProductCustomizationStreaming, ObservableObject {
     @Published
     var data: ProductCustomizationData?
 
-    func publisher() -> some Publisher<ProductCustomizationData, Never> {
+    func publisher() -> any Publisher<ProductCustomizationData, Never> {
         $data.compactMap { $0 }
     }
     

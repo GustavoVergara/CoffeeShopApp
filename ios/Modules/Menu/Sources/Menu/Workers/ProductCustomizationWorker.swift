@@ -4,49 +4,45 @@ protocol ProductCustomizationWorking: AnyObject {
     func selectCustomization(_ customizationID: String, inSection sectionID: String)
     func increaseQuantity()
     func decreaseQuantity()
-    
-    var sections: [ProductCustomizationSection] { get }
-    var selectedQuantity: Int { get }
-    var currentPrice: Double { get }
-    var currentDisplayPrice: String { get }
 }
 
+// TODO: Emit state changes to a stream so that all views can be updated, regardless of where the change was triggered from
 final class ProductCustomizationWorker: ProductCustomizationWorking {
-    var sections: [ProductCustomizationSection]
-    var selectedQuantity: Int = 1
-    var currentPrice: Double
-    var currentDisplayPrice: String {
-        priceFormatter.displayPrice(currentPrice)
-    }
-    
     private let basePrice: Double
-    private let priceFormatter: PriceFormatting
+    private let stream: any MutableProductCustomizationStreaming
     
-    init(priceFormatter: PriceFormatting = PriceFormatter(),
-         customizationSections: [ProductCustomizationSection],
-         basePrice: Double,
-         selectedQuantity: Int = 1) {
-        self.priceFormatter = priceFormatter
-        self.sections = customizationSections
-        self.selectedQuantity = selectedQuantity
+    init(productCustomizationStream: any MutableProductCustomizationStreaming,
+         basePrice: Double) {
+        self.stream = productCustomizationStream
         self.basePrice = basePrice
-        self.currentPrice = basePrice
     }
     
-    convenience init(priceFormatter: PriceFormatting = PriceFormatter(), product: ProductResponse) {
+    convenience init(productCustomizationStream: any MutableProductCustomizationStreaming,
+                     product: ProductResponse) {
+        if productCustomizationStream.data == nil {
+            let sections = Self.mapSectionsFromProduct(product)
+            let data = ProductCustomizationData(
+                sections: sections,
+                selectedQuantity: 1,
+                currentPrice: product.basePrice ?? 0,
+                hasSelectedAllRequiredCustomizations: Self.hasSelectedOptionInAllSections(sections)
+            )
+            productCustomizationStream.emit(data)
+        }
         self.init(
-            priceFormatter: priceFormatter,
-            customizationSections: Self.mapSectionsFromProduct(product),
-            basePrice: product.basePrice ?? 0,
-            selectedQuantity: 1
+            productCustomizationStream: productCustomizationStream,
+            basePrice: product.basePrice ?? 0
         )
     }
     
     func selectCustomization(_ customizationID: String, inSection sectionID: String) {
-        guard let sectionIndex = sections.firstIndex(where: { $0.id == sectionID }) else {
+        guard
+            var currentData = stream.data,
+            let sectionIndex = currentData.sections.firstIndex(where: { $0.id == sectionID })
+        else {
             return
         }
-        var section = sections[sectionIndex]
+        var section = currentData.sections[sectionIndex]
         section.options = section.options.map { option in
             var modifiableOption = option
             modifiableOption.isSelected = option.id == customizationID
@@ -55,17 +51,22 @@ final class ProductCustomizationWorker: ProductCustomizationWorking {
             }
             return modifiableOption
         }
-        sections[sectionIndex] = section
-        currentPrice = basePrice + Self.minPrice(sections)
+        currentData.sections[sectionIndex] = section
+        currentData.currentPrice = basePrice + Self.minPrice(currentData.sections)
+        currentData.hasSelectedAllRequiredCustomizations = Self.hasSelectedOptionInAllSections(currentData.sections)
+        stream.emit(currentData)
     }
     
     func increaseQuantity() {
-        selectedQuantity += 1
+        guard var currentData = stream.data else { return }
+        currentData.selectedQuantity += 1
+        stream.emit(currentData)
     }
     
     func decreaseQuantity() {
-        guard selectedQuantity > 1 else { return }
-        selectedQuantity -= 1
+        guard var currentData = stream.data, currentData.selectedQuantity > 1 else { return }
+        currentData.selectedQuantity -= 1
+        stream.emit(currentData)
     }
     
     private static func mapSectionsFromProduct(_ product: ProductResponse) -> [ProductCustomizationSection] {
@@ -111,6 +112,10 @@ final class ProductCustomizationWorker: ProductCustomizationWorking {
             }
         }
         return price
+    }
+    
+    private static func hasSelectedOptionInAllSections(_ sections: [ProductCustomizationSection]) -> Bool {
+        sections.allSatisfy { $0.options.contains(where: \.isSelected) }
     }
 }
 

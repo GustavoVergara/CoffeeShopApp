@@ -6,19 +6,10 @@ struct AddToDraftOrderButton: View {
     @ObservedObject var viewModel: AddToDraftOrderButtonViewModel
 
     var body: some View {
-        HStack {
-            Spacer().frame(maxWidth: 8)
+        HStack(spacing: 0) {
             counterView
             Color.white.frame(maxWidth: 1)
-            Button("Adicionar \(viewModel.currentDisplayPrice)") {
-                print("Add product to DraftOrder")
-            }
-            .lineLimit(1)
-            .fixedSize()
-            Spacer().frame(maxWidth: 8)
-        }
-        .background {
-            R.color.darkGreen()
+            addToDraftOrderView
         }
         .foregroundColor(.white)
         .cornerRadius(24)
@@ -26,22 +17,40 @@ struct AddToDraftOrderButton: View {
     }
     
     private var counterView: some View {
-        HStack(spacing: 0) {
-            Button {
-                interactor.increaseQuantity()
-            } label: {
-                Image(systemName: "plus.circle")
-                    .padding(.vertical)
+        ZStack {
+            R.color.darkGreen()
+            HStack(spacing: 0) {
+                Button {
+                    interactor.increaseQuantity()
+                } label: {
+                    Image(systemName: "plus.circle")
+                }
+                Text("\(viewModel.selectedQuantity)")
+                    .frame(minWidth: 20)
+                Button {
+                    interactor.decreaseQuantity()
+                } label: {
+                    Image(systemName: "minus.circle")
+                }
             }
-            Text("\(viewModel.selectedQuantity)")
-                .frame(minWidth: 20)
-//                .font(.system(size: 20, weight: .bold))
-            Button {
-                interactor.decreaseQuantity()
-            } label: {
-                Image(systemName: "minus.circle")
-                    .padding(.vertical)
+            .padding([.horizontal], 8)
+        }
+    }
+    
+    private var addToDraftOrderView: some View {
+        ZStack {
+            if viewModel.canAddToDraftOrder {
+                R.color.darkGreen()
+            } else {
+                R.color.lightGreen()
             }
+            Button("Adicionar \(viewModel.currentDisplayPrice)") {
+                interactor.addToDraftOrder()
+            }
+            .lineLimit(1)
+            .fixedSize()
+            .disabled(!viewModel.canAddToDraftOrder)
+            .padding([.horizontal], 8)
         }
     }
 }

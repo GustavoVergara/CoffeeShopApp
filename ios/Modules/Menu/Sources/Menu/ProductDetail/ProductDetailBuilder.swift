@@ -5,15 +5,18 @@ struct ProductDetailBuilder {
     public static let shared = Self.init()
     
     func build(product: ProductResponse) -> some View {
-        let customizationWorker = ProductCustomizationWorker(product: product)
-        let viewModel = ProductDetailViewModel(product: product, customizationSections: customizationWorker.sections)
-        let interactor = ProductDetailInteractor(productCustomizationWorker: customizationWorker, presenter: viewModel)
-        return ProductDetailView(interactor: interactor, viewModel: viewModel, addToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker))
+        let customizationStream = ProductCustomizationStream()
+        let customizationWorker = ProductCustomizationWorker(productCustomizationStream: customizationStream, product: product)
+        let viewModel = ProductDetailViewModel(product: product, customizationSections: customizationStream.data!.sections)
+        let interactor = ProductDetailInteractor(productCustomizationWorker: customizationWorker, productCustomizationStream: customizationStream, presenter: viewModel)
+        return ProductDetailView(interactor: interactor,
+                                 viewModel: viewModel,
+                                 addToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker, productCustomizationStream: customizationStream))
     }
     
     func buildPreview() -> some View {
-        let customizationWorker = ProductCustomizationWorker(
-            customizationSections: [
+        let data = ProductCustomizationData(
+            sections: [
                 ProductCustomizationSection(
                     id: "preview-tamanho",
                     title: "Tamanho",
@@ -59,6 +62,15 @@ struct ProductDetailBuilder {
                     ]
                 )
             ],
+            selectedQuantity: 1,
+            currentPrice: 10,
+            hasSelectedAllRequiredCustomizations: false
+        )
+        
+        let stream = ProductCustomizationStream()
+        stream.emit(data)
+        let customizationWorker = ProductCustomizationWorker(
+            productCustomizationStream: stream,
             basePrice: 10
         )
         
@@ -68,11 +80,15 @@ struct ProductDetailBuilder {
             description: "(Preview) Feito com leite espresso e espuma de leite.",
             image: R.image.cappuccino(),
             price: "a partir de R$ 10,00",
-            customizationSections: customizationWorker.sections
+            customizationSections: data.sections
         )
         
-        let interactor = ProductDetailInteractor(productCustomizationWorker: customizationWorker, presenter: viewModel)
-        return ProductDetailView(interactor: interactor, viewModel: viewModel, addToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker))
+        let interactor = ProductDetailInteractor(productCustomizationWorker: customizationWorker, productCustomizationStream: stream, presenter: viewModel)
+        return ProductDetailView(
+            interactor: interactor,
+            viewModel: viewModel,
+            addToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker, productCustomizationStream: stream)
+        )
     }
 }
 

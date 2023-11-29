@@ -14,11 +14,15 @@ protocol AddToDraftOrderButtonBuilding {
 
 struct AddToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilding {
     let productCustomizationWorker: ProductCustomizationWorking
-    
+    let productCustomizationStream: ProductCustomizationStreaming
+
     func build() -> some View {
-        let viewModel = AddToDraftOrderButtonViewModel(currentDisplayPrice: productCustomizationWorker.currentDisplayPrice, selectedQuantity: productCustomizationWorker.selectedQuantity)
+        let viewModel = AddToDraftOrderButtonViewModel(currentPrice: productCustomizationStream.data?.currentPrice,
+                                                       selectedQuantity: productCustomizationStream.data?.selectedQuantity ?? 1,
+                                                       canAddToDraftOrder: true)
         let interactor = AddToDraftOrderInteractor(productCustomizationWorker: productCustomizationWorker,
-                                                   presenter: viewModel)
+                                                   presenter: viewModel,
+                                                   productCustomizationStream: productCustomizationStream)
         return AddToDraftOrderButton(interactor: interactor, viewModel: viewModel)
     }
 }
@@ -26,8 +30,8 @@ struct AddToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilding {
 // MARK: - Preview
 struct AddToDraftOrderButtonBuilderPreview: AddToDraftOrderButtonBuilding {
     func build() -> some View {
-        let customizationWorker = ProductCustomizationWorker(
-            customizationSections: [
+        let data = ProductCustomizationData(
+            sections: [
                 ProductCustomizationSection(
                     id: "preview-tamanho",
                     title: "Tamanho",
@@ -73,12 +77,20 @@ struct AddToDraftOrderButtonBuilderPreview: AddToDraftOrderButtonBuilding {
                     ]
                 )
             ],
-            basePrice: 10
+            selectedQuantity: 1,
+            currentPrice: 10,
+            hasSelectedAllRequiredCustomizations: false
         )
+        let stream = ProductCustomizationStream()
+        stream.emit(data)
+        let customizationWorker = ProductCustomizationWorker(productCustomizationStream: stream, basePrice: data.currentPrice)
 
-        let viewModel = AddToDraftOrderButtonViewModel(currentDisplayPrice: customizationWorker.currentDisplayPrice, selectedQuantity: customizationWorker.selectedQuantity)
+        let viewModel = AddToDraftOrderButtonViewModel(currentPrice: data.currentPrice,
+                                                       selectedQuantity: data.selectedQuantity,
+                                                       canAddToDraftOrder: data.hasSelectedAllRequiredCustomizations)
         let interactor = AddToDraftOrderInteractor(productCustomizationWorker: customizationWorker,
-                                                   presenter: viewModel)
+                                                   presenter: viewModel,
+                                                   productCustomizationStream: stream)
         return AddToDraftOrderButton(interactor: interactor, viewModel: viewModel)
     }
 }
