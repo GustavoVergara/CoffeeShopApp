@@ -16,10 +16,6 @@ struct SKUResponse: Codable, Hashable {
     var id: String
     var price: Double
     var attributes: [String: String]
-    
-    func displayPrice(formatter: NumberFormatter = .brlCurrencyFormatter) -> String? {
-        formatter.string(for: price)
-    }
 }
 
 struct AttributeResponse: Codable, Hashable {

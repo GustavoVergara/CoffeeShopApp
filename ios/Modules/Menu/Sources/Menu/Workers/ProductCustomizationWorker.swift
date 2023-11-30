@@ -1,4 +1,5 @@
 import Collections
+import Core
 
 protocol ProductCustomizationWorking: AnyObject {
     func selectCustomization(_ customizationID: String, inSection sectionID: String)

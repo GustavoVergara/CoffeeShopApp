@@ -1,4 +1,5 @@
 import SwiftUI
+import Core
 
 final class AddToDraftOrderButtonViewModel: ObservableObject, AddToDraftOrderPresenting {
     @Published var currentDisplayPrice: String
