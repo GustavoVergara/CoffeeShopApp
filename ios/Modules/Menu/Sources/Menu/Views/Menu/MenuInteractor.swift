@@ -10,12 +10,14 @@ protocol MenuInteracting {
 class MenuInteractor: MenuInteracting {
     let navigationStack: ViewStacking
     let menuNetworker: MenuNetworking
+    let cartBuilder: any ViewBuilding
     let presenter: MenuPresenting
     private var menuResponse: MenuResponse?
 
-    init(menuNetworker: MenuNetworking = MenuNetworker(), navigationStack: ViewStacking, presenter: MenuPresenting) {
+    init(menuNetworker: MenuNetworking = MenuNetworker(), navigationStack: ViewStacking, cartBuilder: any ViewBuilding, presenter: MenuPresenting) {
         self.menuNetworker = menuNetworker
         self.navigationStack = navigationStack
+        self.cartBuilder = cartBuilder
         self.presenter = presenter
     }
     
@@ -36,6 +38,6 @@ class MenuInteractor: MenuInteracting {
             return
         }
         
-        navigationStack.push(ProductDetailBuilder(navigationStack: navigationStack, product: product))
+        navigationStack.push(ProductDetailBuilder(navigationStack: navigationStack, cartBuilder: cartBuilder, product: product))
     }
 }

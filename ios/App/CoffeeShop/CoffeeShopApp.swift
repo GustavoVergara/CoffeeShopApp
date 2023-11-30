@@ -15,7 +15,8 @@ struct CoffeeShopApp: App {
     var body: some Scene {
         WindowGroup {
             NavigationBuilder { stack in
-                TabBuider(menuBuilder: MenuBuilder(navigationStack: stack), cartBuilder: CartBuilder())
+                TabBuider(menuBuilder: MenuBuilder(navigationStack: stack, cartBuilder: CartBuilder()),
+                          cartBuilder: CartBuilder())
             }.build()
         }
     }

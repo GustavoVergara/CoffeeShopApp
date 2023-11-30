@@ -18,7 +18,6 @@ let package = Package(
         .package(path: "HTTP"),
         .package(path: "OrderLibrary"),
         .package(path: "Navigation"),
-        .package(path: "Checkout"),
         .package(url: "https://github.com/GustavoVergara/Resourceful.git", branch: "main"),
         .package(url: "https://github.com/apple/swift-collections", from: "1.0.0"),
     ],
@@ -33,7 +32,6 @@ let package = Package(
                 "OrderLibrary",
                 "Navigation",
                 "Resourceful",
-                "Checkout",
                 .product(name: "Collections", package: "swift-collections"),
             ]),
         .testTarget(

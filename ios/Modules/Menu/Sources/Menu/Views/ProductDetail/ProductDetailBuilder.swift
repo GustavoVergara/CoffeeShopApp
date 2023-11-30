@@ -6,6 +6,7 @@ struct ProductDetailBuilder: ViewBuilding {
     var id: String { "productDetail/\(product.id)" }
     
     let navigationStack: ViewStacking
+    let cartBuilder: any ViewBuilding
     let product: ProductResponse
     
     func build() -> some View {
@@ -14,6 +15,7 @@ struct ProductDetailBuilder: ViewBuilding {
         let addToDraftOrderButtonBuilder = AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker,
                                                                         productCustomizationStream: customizationStream,
                                                                         navigationStack: navigationStack,
+                                                                        cartBuilder: cartBuilder,
                                                                         product: product)
         
         let viewModel = ProductDetailViewModel(product: product, customizationSections: customizationStream.data!.sections)
@@ -110,6 +112,7 @@ struct PreviewProductDetailBuilder: ViewBuilding {
             addToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker,
                                                                        productCustomizationStream: stream,
                                                                        navigationStack: navigationStack,
+                                                                       cartBuilder: PreviewViewBuilder(view: Color.blue),
                                                                        product: product)
         )
     }

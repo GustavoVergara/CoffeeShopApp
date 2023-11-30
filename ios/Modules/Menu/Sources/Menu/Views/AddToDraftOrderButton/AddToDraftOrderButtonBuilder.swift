@@ -15,6 +15,7 @@ struct AddToDraftOrderButtonBuilder: ViewBuilding {
     let productCustomizationWorker: ProductCustomizationWorking
     let productCustomizationStream: ProductCustomizationStreaming
     let navigationStack: ViewStacking
+    let cartBuilder: any ViewBuilding
     let product: ProductResponse
 
     func build() -> some View {
@@ -25,6 +26,7 @@ struct AddToDraftOrderButtonBuilder: ViewBuilding {
                                                    productCustomizationStream: productCustomizationStream,
                                                    draftOrderStore: DraftOrderStore(),
                                                    navigationStack: navigationStack,
+                                                   cartBuilder: cartBuilder,
                                                    presenter: viewModel,
                                                    product: product)
         return AddToDraftOrderButton(interactor: interactor, viewModel: viewModel)
@@ -100,6 +102,7 @@ struct AddToDraftOrderButtonBuilderPreview: ViewBuilding {
                                                    productCustomizationStream: stream,
                                                    draftOrderStore: DraftOrderStore(),
                                                    navigationStack: navigationStack,
+                                                   cartBuilder: PreviewViewBuilder(view: Color.blue),
                                                    presenter: viewModel,
                                                    product: ProductResponse(id: "id", name: "name", description: "", skus: [], allAttributes: []))
         return AddToDraftOrderButton(interactor: interactor, viewModel: viewModel)

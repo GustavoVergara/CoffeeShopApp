@@ -99,7 +99,7 @@ struct MenuItemView: View {
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationBuilder { stack in
-            MenuBuilder(navigationStack: stack)
+            MenuBuilder(navigationStack: stack, cartBuilder: PreviewViewBuilder(view: Color.blue))
         }.build().previewDisplayName("Live")
         NavigationBuilder { stack in
             PreviewMenuBuilder(navigationStack: stack)

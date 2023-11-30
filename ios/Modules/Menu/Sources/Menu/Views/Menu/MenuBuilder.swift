@@ -5,14 +5,16 @@ public struct MenuBuilder: ViewBuilding {
     public var id: String { "menu" }
     
     let navigationStack: ViewStacking
+    let cartBuilder: any ViewBuilding
     
-    public init(navigationStack: ViewStacking) {
+    public init(navigationStack: ViewStacking, cartBuilder: any ViewBuilding) {
         self.navigationStack = navigationStack
+        self.cartBuilder = cartBuilder
     }
 
     public func build() -> some View {
         let viewModel = MenuViewModel()
-        let interactor = MenuInteractor(navigationStack: navigationStack, presenter: viewModel)
+        let interactor = MenuInteractor(navigationStack: navigationStack, cartBuilder: cartBuilder, presenter: viewModel)
         return MenuView(interactor: interactor, viewModel: viewModel)
     }
 }
@@ -47,7 +49,7 @@ struct PreviewMenuBuilder: ViewBuilding {
         }
         
         func didSelectItem(id: String) {
-            navigationStack.push(ProductDetailBuilder(navigationStack: navigationStack, product: Stub.Product.cappuccino))
+            navigationStack.push(ProductDetailBuilder(navigationStack: navigationStack, cartBuilder: PreviewViewBuilder(view: Color.blue), product: Stub.Product.cappuccino))
         }
         
         enum Stub {
