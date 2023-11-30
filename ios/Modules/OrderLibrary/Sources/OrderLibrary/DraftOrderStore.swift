@@ -1,14 +1,23 @@
 public struct DraftOrderProduct: Codable, Hashable {
-    var id: String
-    var name: String
-    var sku: DraftOrderSKU
-    var quantity: Int
+    public var id: String
+    public var name: String
+    public var imageURL: String?
+    public var sku: DraftOrderSKU
+    public var quantity: Int
+    
+    public init(id: String, name: String, imageURL: String?, sku: DraftOrderSKU, quantity: Int) {
+        self.id = id
+        self.name = name
+        self.imageURL = imageURL
+        self.sku = sku
+        self.quantity = quantity
+    }
 }
 
 public struct DraftOrderSKU: Codable, Hashable {
-    var id: String
-    var price: Double
-    var attributes: [String: String]
+    public var id: String
+    public var price: Double
+    public var attributes: [String: String]
     
     public init(id: String, price: Double, attributes: [String : String]) {
         self.id = id
@@ -18,7 +27,7 @@ public struct DraftOrderSKU: Codable, Hashable {
 }
 
 public protocol DraftOrderStoring {
-    func addProduct(id: String, name: String, sku: DraftOrderSKU, quantity: Int)
+    func addProduct(_ product: DraftOrderProduct)
     func updateProductQuantity(id: String, skuID: String, quantity: Int)
 }
 
@@ -34,14 +43,14 @@ public class DraftOrderStore: DraftOrderStoring {
         self.init(store: DiskStorage())
     }
     
-    public func addProduct(id: String, name: String, sku: DraftOrderSKU, quantity: Int) {
+    public func addProduct(_ product: DraftOrderProduct) {
         var draftOrderProducts = store.object([DraftOrderProduct].self, forKey: storageKey) ?? []
-        if let addedProductIndex = draftOrderProducts.firstIndex(where: { $0.id == id && $0.sku.id == sku.id }) {
+        if let addedProductIndex = draftOrderProducts.firstIndex(where: { $0.id == product.id && $0.sku.id == product.sku.id }) {
             var addedProduct = draftOrderProducts[addedProductIndex]
-            addedProduct.quantity += quantity
+            addedProduct.quantity += product.quantity
             draftOrderProducts[addedProductIndex] = addedProduct
         } else {
-            draftOrderProducts.append(DraftOrderProduct(id: id, name: name, sku: sku, quantity: quantity))
+            draftOrderProducts.append(product)
         }
         store.store(draftOrderProducts, forKey: storageKey)
     }

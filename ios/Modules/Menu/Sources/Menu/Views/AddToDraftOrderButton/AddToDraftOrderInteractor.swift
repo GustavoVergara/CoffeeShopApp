@@ -58,7 +58,7 @@ final class AddToDraftOrderInteractor: AddToDraftOrderInteracting {
     
     func addToDraftOrder() {
         guard let selectedSKU else { return }
-        draftOrderStore.addProduct(id: product.id, name: product.name, sku: selectedSKU, quantity: productCustomizationStream.data?.selectedQuantity ?? 1)
+        draftOrderStore.addProduct(DraftOrderProduct(id: product.id, name: product.name, imageURL: product.photo, sku: selectedSKU, quantity: productCustomizationStream.data?.selectedQuantity ?? 1))
     }
     
     func mapSelectedSKU(data: ProductCustomizationData) -> DraftOrderSKU? {
