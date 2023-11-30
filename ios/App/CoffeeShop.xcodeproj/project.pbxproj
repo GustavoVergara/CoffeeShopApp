@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		6B300E532AD63053002B9747 /* OrderLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 6B300E522AD63053002B9747 /* OrderLibrary */; };
+		6B7F9C142B17F9070051974F /* Checkout in Frameworks */ = {isa = PBXBuildFile; productRef = 6B7F9C132B17F9070051974F /* Checkout */; };
 		6BC14EFC2AC777B3000ADFEC /* CoffeeShopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC14EFB2AC777B3000ADFEC /* CoffeeShopApp.swift */; };
 		6BC14F002AC777B7000ADFEC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BC14EFF2AC777B7000ADFEC /* Assets.xcassets */; };
 		6BC14F032AC777B7000ADFEC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BC14F022AC777B7000ADFEC /* Preview Assets.xcassets */; };
@@ -19,6 +20,7 @@
 
 /* Begin PBXFileReference section */
 		6B300E512AD63040002B9747 /* OrderLibrary */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = OrderLibrary; path = ../Modules/OrderLibrary; sourceTree = "<group>"; };
+		6B7F9C122B17F8710051974F /* Checkout */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Checkout; path = ../Modules/Checkout; sourceTree = "<group>"; };
 		6BC14EF82AC777B3000ADFEC /* CoffeeShop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoffeeShop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BC14EFB2AC777B3000ADFEC /* CoffeeShopApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeShopApp.swift; sourceTree = "<group>"; };
 		6BC14EFF2AC777B7000ADFEC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -35,6 +37,7 @@
 			files = (
 				6BF6EF892AC77CFE007C655C /* HTTP in Frameworks */,
 				6BF6EF922ACCFFD8007C655C /* Core in Frameworks */,
+				6B7F9C142B17F9070051974F /* Checkout in Frameworks */,
 				6BF6EF902ACCE649007C655C /* Menu in Frameworks */,
 				6B300E532AD63053002B9747 /* OrderLibrary in Frameworks */,
 				6BF6EF8C2AC7A4B5007C655C /* Resourceful in Frameworks */,
@@ -83,6 +86,7 @@
 		6BC14F252AC77945000ADFEC /* Packages */ = {
 			isa = PBXGroup;
 			children = (
+				6B7F9C122B17F8710051974F /* Checkout */,
 				6B300E512AD63040002B9747 /* OrderLibrary */,
 				6BF6EF8E2AC7A896007C655C /* Menu */,
 				6BF6EF8D2AC7A4EA007C655C /* Core */,
@@ -120,6 +124,7 @@
 				6BF6EF8F2ACCE649007C655C /* Menu */,
 				6BF6EF912ACCFFD8007C655C /* Core */,
 				6B300E522AD63053002B9747 /* OrderLibrary */,
+				6B7F9C132B17F9070051974F /* Checkout */,
 			);
 			productName = CoffeeShop;
 			productReference = 6BC14EF82AC777B3000ADFEC /* CoffeeShop.app */;
@@ -395,6 +400,10 @@
 		6B300E522AD63053002B9747 /* OrderLibrary */ = {
 			isa = XCSwiftPackageProductDependency;
 			productName = OrderLibrary;
+		};
+		6B7F9C132B17F9070051974F /* Checkout */ = {
+			isa = XCSwiftPackageProductDependency;
+			productName = Checkout;
 		};
 		6BF6EF882AC77CFE007C655C /* HTTP */ = {
 			isa = XCSwiftPackageProductDependency;

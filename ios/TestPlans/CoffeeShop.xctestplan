@@ -43,6 +43,13 @@
         "identifier" : "OrderLibraryTests",
         "name" : "OrderLibraryTests"
       }
+    },
+    {
+      "target" : {
+        "containerPath" : "container:..\/Modules\/Checkout",
+        "identifier" : "CheckoutTests",
+        "name" : "CheckoutTests"
+      }
     }
   ],
   "version" : 1
