@@ -1,6 +1,8 @@
 public protocol DraftOrderStoring {
     func addProduct(_ product: DraftOrderProduct)
+    func removeProduct(id: String, skuID: String)
     func updateProductQuantity(id: String, skuID: String, quantity: Int)
+    func getProducts() -> [DraftOrderProduct]
 }
 
 public class DraftOrderStore: DraftOrderStoring {
@@ -27,6 +29,16 @@ public class DraftOrderStore: DraftOrderStoring {
         store.store(draftOrderProducts, forKey: storageKey)
     }
     
+    public func removeProduct(id: String, skuID: String) {
+        var products = store.object([DraftOrderProduct].self, forKey: storageKey) ?? []
+        guard let addedProductIndex = products.firstIndex(where: { $0.id == id && $0.sku.id == skuID }) else {
+            return
+        }
+        
+        products.remove(at: addedProductIndex)
+        store.store(products, forKey: storageKey)
+    }
+    
     public func updateProductQuantity(id: String, skuID: String, quantity: Int) {
         guard
             var draftOrderProducts = store.object([DraftOrderProduct].self, forKey: storageKey),
@@ -37,5 +49,9 @@ public class DraftOrderStore: DraftOrderStoring {
         
         draftOrderProducts[addedProductIndex].quantity = quantity
         store.store(draftOrderProducts, forKey: storageKey)
+    }
+    
+    public func getProducts() -> [DraftOrderProduct] {
+        store.object([DraftOrderProduct].self, forKey: storageKey) ?? []
     }
 }
