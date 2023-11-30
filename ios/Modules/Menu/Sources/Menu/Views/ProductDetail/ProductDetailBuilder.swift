@@ -5,12 +5,16 @@ import Navigation
 struct ProductDetailBuilder: ViewBuilding {
     var id: String { "productDetail/\(product.id)" }
     
+    let navigationStack: ViewStacking
     let product: ProductResponse
     
     func build() -> some View {
         let customizationStream = ProductCustomizationStream()
         let customizationWorker = ProductCustomizationWorker(productCustomizationStream: customizationStream, product: product)
-        let addToDraftOrderButtonBuilder = AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker, productCustomizationStream: customizationStream, product: product)
+        let addToDraftOrderButtonBuilder = AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker,
+                                                                        productCustomizationStream: customizationStream,
+                                                                        navigationStack: navigationStack,
+                                                                        product: product)
         
         let viewModel = ProductDetailViewModel(product: product, customizationSections: customizationStream.data!.sections)
         let interactor = ProductDetailInteractor(productCustomizationWorker: customizationWorker, productCustomizationStream: customizationStream, presenter: viewModel)
@@ -22,6 +26,8 @@ struct ProductDetailBuilder: ViewBuilding {
 
 struct PreviewProductDetailBuilder: ViewBuilding {
     var id: String { "productDetail/preview" }
+    
+    let navigationStack: ViewStacking
     
     func build() -> some View {
         let data = ProductCustomizationData(
@@ -101,7 +107,10 @@ struct PreviewProductDetailBuilder: ViewBuilding {
         return ProductDetailView(
             interactor: interactor,
             viewModel: viewModel,
-            addToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker, productCustomizationStream: stream, product: product)
+            addToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker,
+                                                                       productCustomizationStream: stream,
+                                                                       navigationStack: navigationStack,
+                                                                       product: product)
         )
     }
 }

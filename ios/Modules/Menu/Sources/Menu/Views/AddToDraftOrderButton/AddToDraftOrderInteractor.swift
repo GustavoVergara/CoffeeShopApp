@@ -1,5 +1,7 @@
 import Combine
 import Core
+import Navigation
+import Checkout
 import OrderLibrary
 
 protocol AddToDraftOrderInteracting {
@@ -18,6 +20,7 @@ final class AddToDraftOrderInteractor: AddToDraftOrderInteracting {
     private let productCustomizationWorker: ProductCustomizationWorking
     private let productCustomizationStream: ProductCustomizationStreaming
     private let draftOrderStore: DraftOrderStoring
+    private let navigationStack: ViewStacking
     private let presenter: AddToDraftOrderPresenting
     private let product: ProductResponse
     private var cancellables = Set<AnyCancellable>()
@@ -27,11 +30,13 @@ final class AddToDraftOrderInteractor: AddToDraftOrderInteracting {
     init(productCustomizationWorker: ProductCustomizationWorking,
          productCustomizationStream: ProductCustomizationStreaming,
          draftOrderStore: DraftOrderStoring,
+         navigationStack: ViewStacking,
          presenter: AddToDraftOrderPresenting,
          product: ProductResponse) {
         self.productCustomizationWorker = productCustomizationWorker
         self.productCustomizationStream = productCustomizationStream
         self.draftOrderStore = draftOrderStore
+        self.navigationStack = navigationStack
         self.presenter = presenter
         self.product = product
         
@@ -59,6 +64,7 @@ final class AddToDraftOrderInteractor: AddToDraftOrderInteracting {
     func addToDraftOrder() {
         guard let selectedSKU else { return }
         draftOrderStore.addProduct(DraftOrderProduct(id: product.id, name: product.name, imageURL: product.photo, sku: selectedSKU, quantity: productCustomizationStream.data?.selectedQuantity ?? 1))
+        navigationStack.push(CartBuilder())
     }
     
     func mapSelectedSKU(data: ProductCustomizationData) -> DraftOrderSKU? {

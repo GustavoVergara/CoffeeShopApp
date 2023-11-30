@@ -36,6 +36,6 @@ class MenuInteractor: MenuInteracting {
             return
         }
         
-        navigationStack.push(ProductDetailBuilder(product: product))
+        navigationStack.push(ProductDetailBuilder(navigationStack: navigationStack, product: product))
     }
 }

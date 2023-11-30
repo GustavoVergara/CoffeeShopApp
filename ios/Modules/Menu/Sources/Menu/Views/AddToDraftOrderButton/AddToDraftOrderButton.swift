@@ -1,4 +1,5 @@
 import SwiftUI
+import Navigation
 import Core
 
 struct AddToDraftOrderButton: View {
@@ -57,7 +58,9 @@ struct AddToDraftOrderButton: View {
 
 struct AddToDraftOrderButton_Previews: PreviewProvider {
     static var previews: some View {
-        AddToDraftOrderButtonBuilderPreview().build()
+        NavigationBuilder { stack in
+            AddToDraftOrderButtonBuilderPreview(navigationStack: stack)
+        }.build()
             .fixedSize()
             .previewLayout(.sizeThatFits)
     }

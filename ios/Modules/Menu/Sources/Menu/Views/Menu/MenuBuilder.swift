@@ -47,7 +47,7 @@ struct PreviewMenuBuilder: ViewBuilding {
         }
         
         func didSelectItem(id: String) {
-            navigationStack.push(ProductDetailBuilder(product: Stub.Product.cappuccino))
+            navigationStack.push(ProductDetailBuilder(navigationStack: navigationStack, product: Stub.Product.cappuccino))
         }
         
         enum Stub {

@@ -1,7 +1,8 @@
 import SwiftUI
+import Navigation
 import Core
 
-struct ProductDetailView<AddToDraftOrderButtonBuild: AddToDraftOrderButtonBuilding>: View {
+struct ProductDetailView<AddToDraftOrderButtonBuild: ViewBuilding>: View {
     let interactor: ProductDetailInteracting
     @ObservedObject var viewModel: ProductDetailViewModel
     let addToDraftOrderButtonBuilder: AddToDraftOrderButtonBuild
@@ -85,8 +86,8 @@ struct ProductDetailView<AddToDraftOrderButtonBuild: AddToDraftOrderButtonBuildi
 
 struct ProductDetailView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationStack {
-            PreviewProductDetailBuilder().build()
-        }.previewDisplayName("Mocked")
+        NavigationBuilder { stack in
+            PreviewProductDetailBuilder(navigationStack: stack)
+        }.build().previewDisplayName("Mocked")
     }
 }

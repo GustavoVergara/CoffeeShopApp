@@ -7,15 +7,14 @@
 
 import SwiftUI
 import OrderLibrary
+import Navigation
 
-protocol AddToDraftOrderButtonBuilding {
-    associatedtype Content: View
-    func build() -> Content
-}
-
-struct AddToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilding {
+struct AddToDraftOrderButtonBuilder: ViewBuilding {
+    var id: String { "AddToDraftOrderButton/\(product.id)" }
+    
     let productCustomizationWorker: ProductCustomizationWorking
     let productCustomizationStream: ProductCustomizationStreaming
+    let navigationStack: ViewStacking
     let product: ProductResponse
 
     func build() -> some View {
@@ -25,6 +24,7 @@ struct AddToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilding {
         let interactor = AddToDraftOrderInteractor(productCustomizationWorker: productCustomizationWorker,
                                                    productCustomizationStream: productCustomizationStream,
                                                    draftOrderStore: DraftOrderStore(),
+                                                   navigationStack: navigationStack,
                                                    presenter: viewModel,
                                                    product: product)
         return AddToDraftOrderButton(interactor: interactor, viewModel: viewModel)
@@ -32,7 +32,11 @@ struct AddToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilding {
 }
 
 // MARK: - Preview
-struct AddToDraftOrderButtonBuilderPreview: AddToDraftOrderButtonBuilding {
+struct AddToDraftOrderButtonBuilderPreview: ViewBuilding {
+    var id: String { "AddToDraftOrderButton/preview" }
+
+    let navigationStack: ViewStacking
+    
     func build() -> some View {
         let data = ProductCustomizationData(
             sections: [
@@ -95,6 +99,7 @@ struct AddToDraftOrderButtonBuilderPreview: AddToDraftOrderButtonBuilding {
         let interactor = AddToDraftOrderInteractor(productCustomizationWorker: customizationWorker,
                                                    productCustomizationStream: stream,
                                                    draftOrderStore: DraftOrderStore(),
+                                                   navigationStack: navigationStack,
                                                    presenter: viewModel,
                                                    product: ProductResponse(id: "id", name: "name", description: "", skus: [], allAttributes: []))
         return AddToDraftOrderButton(interactor: interactor, viewModel: viewModel)
