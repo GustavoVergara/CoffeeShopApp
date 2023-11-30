@@ -44,7 +44,9 @@ struct PreviewCartBuilder: ViewBuilding {
             guard let index = products.firstIndex(where: { $0.id == id && $0.sku.id == skuID }) else {
                 return
             }
-            products[index].quantity = quantity
+            var product = products[index]
+            product.quantity = quantity
+            products[index] = product
         }
         
         func removeProduct(id: String, skuID: String) {

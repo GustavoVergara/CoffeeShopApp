@@ -100,8 +100,8 @@ struct CartView_Previews: PreviewProvider {
                                       sku: DraftOrderSKU(id: "sku-id", price: 10, attributes: [:]),
                                       quantity: 1),
                     DraftOrderProduct(id: "prod-id-expr", name: "Espresso", imageURL: nil,
-                                      sku: DraftOrderSKU(id: "sku-id", price: 5, attributes: [:]),
-                                      quantity: 1),
+                                      sku: DraftOrderSKU(id: "sku-id-2", price: 5, attributes: [:]),
+                                      quantity: 2),
                 ]).build()
             }
         }.previewDisplayName("Preview")

@@ -40,7 +40,7 @@ class CartInteractor: CartInteracting {
         if product.quantity > 1 {
             draftOrderStore.updateProductQuantity(id: productID, skuID: skuID, quantity: product.quantity - 1)
         } else {
-            
+            draftOrderStore.removeProduct(id: productID, skuID: skuID)
         }
         presenter.displayItems(draftOrderStore.getProducts())
     }
