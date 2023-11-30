@@ -1,5 +1,6 @@
 import SwiftUI
 import Core
+import OrderLibrary
 
 struct CartView: View {
     let interactor: CartInteracting
@@ -41,6 +42,9 @@ struct CartView: View {
             .padding()
             .tint(R.color.darkGreen())
         }
+        .tabItem {
+            Label("Carrinho", systemImage: "cart.fill")
+        }
     }
 }
 
@@ -78,29 +82,28 @@ struct CartItemView: View {
             }
             .foregroundColor(R.color.darkGreen())
         }
-        .tabItem {
-            Label("Carrinho", systemImage: "cart.fill")
-        }
     }
 }
-
-import OrderLibrary
 
 struct CartView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            CartBuilder().build()
+            TabView {
+                CartBuilder().build()
+            }
         }.previewDisplayName("Live")
 
         NavigationStack {
-            PreviewCartBuilder(products: [
-                DraftOrderProduct(id: "prod-id-capp", name: "Capp", imageURL: nil,
-                                  sku: DraftOrderSKU(id: "sku-id", price: 12, attributes: [:]),
-                                  quantity: 1),
-                DraftOrderProduct(id: "prod-id-expr", name: "Espresso", imageURL: nil,
-                                  sku: DraftOrderSKU(id: "sku-id", price: 12, attributes: [:]),
-                                  quantity: 1),
-            ]).build()
+            TabView {
+                PreviewCartBuilder(products: [
+                    DraftOrderProduct(id: "prod-id-capp", name: "Capp", imageURL: nil,
+                                      sku: DraftOrderSKU(id: "sku-id", price: 12, attributes: [:]),
+                                      quantity: 1),
+                    DraftOrderProduct(id: "prod-id-expr", name: "Espresso", imageURL: nil,
+                                      sku: DraftOrderSKU(id: "sku-id", price: 12, attributes: [:]),
+                                      quantity: 1),
+                ]).build()
+            }
         }.previewDisplayName("Preview")
     }
 }
