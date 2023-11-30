@@ -5,16 +5,12 @@ protocol MenuPresenting {
     func presentLoading() async
     func presentMenu(_ menu: MenuResponse) async
     func presentError(_ error: Error) async
-    func presentProduct(_ product: ProductResponse)
 }
 
 class MenuViewModel: ObservableObject, MenuPresenting {
     let priceFormatter: PriceFormatting = PriceFormatter()
     @Published
     var state: MenuViewState = .loading
-    
-    @Published
-    var presentedProducts = [ProductResponse]()
     
     @MainActor
     func presentLoading() async {
@@ -40,13 +36,6 @@ class MenuViewModel: ObservableObject, MenuPresenting {
     @MainActor
     func presentError(_ error: Error) async {
         state = .failed
-    }
-    
-    // Might make more sense to change this to something like `updatePresentedProducts(_ products: [ProductResponse])`
-    // in order to have the control of the stack handled by a `MenuRouter`.
-    // Might even make sense to have the `presentedProducts` be a stream that is emitted by the Router instead of a direct call.
-    func presentProduct(_ product: ProductResponse) {
-        presentedProducts.append(product)
     }
 }
 

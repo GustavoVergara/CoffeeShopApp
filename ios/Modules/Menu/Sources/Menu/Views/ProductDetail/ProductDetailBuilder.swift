@@ -1,10 +1,13 @@
 import SwiftUI
 import Core
+import Navigation
 
-struct ProductDetailBuilder {
-    public static let shared = Self.init()
+struct ProductDetailBuilder: ViewBuilding {
+    var id: String { "productDetail/\(product.id)" }
     
-    func build(product: ProductResponse) -> some View {
+    let product: ProductResponse
+    
+    func build() -> some View {
         let customizationStream = ProductCustomizationStream()
         let customizationWorker = ProductCustomizationWorker(productCustomizationStream: customizationStream, product: product)
         let addToDraftOrderButtonBuilder = AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker, productCustomizationStream: customizationStream, product: product)
@@ -15,8 +18,12 @@ struct ProductDetailBuilder {
                                  viewModel: viewModel,
                                  addToDraftOrderButtonBuilder: addToDraftOrderButtonBuilder)
     }
+}
+
+struct PreviewProductDetailBuilder: ViewBuilding {
+    var id: String { "productDetail/preview" }
     
-    func buildPreview() -> some View {
+    func build() -> some View {
         let data = ProductCustomizationData(
             sections: [
                 ProductCustomizationSection(

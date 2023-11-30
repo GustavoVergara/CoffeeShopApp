@@ -78,6 +78,9 @@ struct CartItemView: View {
             }
             .foregroundColor(R.color.darkGreen())
         }
+        .tabItem {
+            Label("Carrinho", systemImage: "cart.fill")
+        }
     }
 }
 

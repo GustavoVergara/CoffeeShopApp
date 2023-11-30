@@ -6,14 +6,30 @@
 //
 
 import SwiftUI
+import Navigation
 import Menu
+import Checkout
 
 @main
 struct CoffeeShopApp: App {
     var body: some Scene {
         WindowGroup {
-            MenuBuilder.build()
+            NavigationBuilder { stack in
+                TabBuider(menuBuilder: MenuBuilder(navigationStack: stack), cartBuilder: CartBuilder())
+            }.build()
         }
     }
 }
 
+struct TabBuider<MenuB: ViewBuilding, CartB: ViewBuilding>: ViewBuilding {
+    var id: String { "root/tabs" }
+    let menuBuilder: MenuB
+    let cartBuilder: CartB
+    
+    func build() -> some View {
+        TabView {
+            menuBuilder.build()
+            cartBuilder.build()
+        }
+    }
+}

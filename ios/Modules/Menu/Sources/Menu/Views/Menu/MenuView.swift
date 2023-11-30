@@ -1,5 +1,6 @@
 import SwiftUI
 import Core
+import Navigation
 
 struct MenuView: View {
     let interactor: MenuInteracting
@@ -8,7 +9,7 @@ struct MenuView: View {
     @State var searchQuery = ""
 
     var body: some View {
-        NavigationStack(path: $viewModel.presentedProducts) {
+        Group {
             switch viewModel.state {
             case .loading:
                 ProgressView()
@@ -16,9 +17,6 @@ struct MenuView: View {
                 MenuProductListView(items: filterItems(viewData.items), interactor: interactor)
                     .searchable(text: $searchQuery)
                     .navigationTitle(viewData.storeName)
-                    .navigationDestination(for: ProductResponse.self) { productResponse in
-                        ProductDetailBuilder.shared.build(product: productResponse)
-                    }
             case .failed:
                 ScrollView {
                     Color.red
@@ -30,6 +28,9 @@ struct MenuView: View {
         }
         .task {
             await interactor.didAppear()
+        }
+        .tabItem {
+            Label("Menu", systemImage: "menucard.fill")
         }
     }
     
@@ -97,9 +98,11 @@ struct MenuItemView: View {
 
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
-        MenuBuilder.build()
-            .previewDisplayName("Live")
-        MenuBuilder().buildPreview()
-            .previewDisplayName("Mocked")
+        NavigationBuilder { stack in
+            MenuBuilder(navigationStack: stack)
+        }.build().previewDisplayName("Live")
+        NavigationBuilder { stack in
+            PreviewMenuBuilder(navigationStack: stack)
+        }.build().previewDisplayName("Mocked")
     }
 }

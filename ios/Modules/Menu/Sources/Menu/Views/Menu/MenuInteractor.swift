@@ -1,5 +1,6 @@
 import Foundation
 import HTTP
+import Navigation
 
 protocol MenuInteracting {
     func didAppear() async
@@ -7,13 +8,15 @@ protocol MenuInteracting {
 }
 
 class MenuInteractor: MenuInteracting {
-    let presenter: MenuPresenting
+    let navigationStack: ViewStacking
     let menuNetworker: MenuNetworking
+    let presenter: MenuPresenting
     private var menuResponse: MenuResponse?
 
-    init(presenter: MenuPresenting, menuNetworker: MenuNetworking = MenuNetworker()) {
-        self.presenter = presenter
+    init(menuNetworker: MenuNetworking = MenuNetworker(), navigationStack: ViewStacking, presenter: MenuPresenting) {
         self.menuNetworker = menuNetworker
+        self.navigationStack = navigationStack
+        self.presenter = presenter
     }
     
     func didAppear() async {
@@ -32,6 +35,7 @@ class MenuInteractor: MenuInteracting {
             print("ERROR: Attempting to display unknown product.")
             return
         }
-        presenter.presentProduct(product)
+        
+        navigationStack.push(ProductDetailBuilder(product: product))
     }
 }

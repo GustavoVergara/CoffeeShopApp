@@ -1,20 +1,22 @@
 import SwiftUI
+import Navigation
 import OrderLibrary
 
-protocol CartBuilding {
-    associatedtype Content: View
-    func build() -> Content
-}
-
-struct CartBuilder: CartBuilding {
-    func build() -> some View {
+public struct CartBuilder: ViewBuilding {
+    public var id: String { "cart" }
+    
+    public init() {}
+    
+    public func build() -> some View {
         let viewModel = CartViewModel()
         let interactor = CartInteractor(draftOrderStore: DraftOrderStore(), presenter: viewModel)
         return CartView(interactor: interactor, viewModel: viewModel)
     }
 }
 
-struct PreviewCartBuilder: CartBuilding {
+struct PreviewCartBuilder: ViewBuilding {
+    var id: String { "preview/cart" }
+
     var products: [DraftOrderProduct]
     
     func build() -> some View {

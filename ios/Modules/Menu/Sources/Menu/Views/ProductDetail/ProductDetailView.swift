@@ -86,7 +86,7 @@ struct ProductDetailView<AddToDraftOrderButtonBuild: AddToDraftOrderButtonBuildi
 struct ProductDetailView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationStack {
-            ProductDetailBuilder.shared.buildPreview()
+            PreviewProductDetailBuilder().build()
         }.previewDisplayName("Mocked")
     }
 }
