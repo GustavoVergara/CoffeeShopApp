@@ -25,18 +25,13 @@ class CartViewModel: ObservableObject, CartPresenting {
                                 quantity: $0.quantity)
         })
         
-        let total = products.reduce(0, { $0 + $1.sku.price })
+        let total = products.reduce(0, { $0 + ($1.sku.price * Double($1.quantity)) })
         totalPrice = priceFormatter.displayPrice(total)
     }
 }
 
-struct CartItemData: Identifiable {
-    var id: Int {
-        var hasher = Hasher()
-        hasher.combine(productID)
-        hasher.combine(skuID)
-        return hasher.finalize()
-    }
+struct CartItemData: Identifiable, Hashable {
+    var id: Int { hashValue }
     var productID: String
     var skuID: String
     var image: CoreImage

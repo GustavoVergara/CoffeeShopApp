@@ -25,15 +25,33 @@ struct PreviewCartBuilder: ViewBuilding {
         return CartView(interactor: interactor, viewModel: viewModel)
     }
     
-    struct PreviewDraftOrderStore: DraftOrderStoring {
+    class PreviewDraftOrderStore: DraftOrderStoring {
         var products: [DraftOrderProduct]
+        
+        init(products: [DraftOrderProduct]) {
+            self.products = products
+        }
         
         func getProducts() -> [DraftOrderProduct] {
             products
         }
         
-        func addProduct(_ product: DraftOrderProduct) {}
-        func updateProductQuantity(id: String, skuID: String, quantity: Int) {}
-        func removeProduct(id: String, skuID: String) {}
+        func addProduct(_ product: DraftOrderProduct) {
+            products.append(product)
+        }
+        
+        func updateProductQuantity(id: String, skuID: String, quantity: Int) {
+            guard let index = products.firstIndex(where: { $0.id == id && $0.sku.id == skuID }) else {
+                return
+            }
+            products[index].quantity = quantity
+        }
+        
+        func removeProduct(id: String, skuID: String) {
+            guard let index = products.firstIndex(where: { $0.id == id && $0.sku.id == skuID }) else {
+                return
+            }
+            products.remove(at: index)
+        }
     }
 }

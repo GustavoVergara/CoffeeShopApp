@@ -34,3 +34,14 @@ struct TabBuider<MenuB: ViewBuilding, CartB: ViewBuilding>: ViewBuilding {
         }
     }
 }
+
+struct CoffeeShopApp_Previews: PreviewProvider {
+    static var previews: some View {
+        NavigationBuilder { stack in
+            TabBuider(
+                menuBuilder: MenuBuilder(navigationStack: stack, cartBuilder: CartBuilder()),
+                cartBuilder: CartBuilder()
+            )
+        }.build()
+    }
+}
