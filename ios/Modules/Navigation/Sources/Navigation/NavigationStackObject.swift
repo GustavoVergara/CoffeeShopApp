@@ -2,6 +2,7 @@ import SwiftUI
 
 public protocol ViewStacking {
     func push(_ viewBuilder: any ViewBuilding)
+    func pop(id: String)
 }
 
 class NavigationStackObject: ObservableObject, ViewStacking {
@@ -18,6 +19,10 @@ class NavigationStackObject: ObservableObject, ViewStacking {
     
     func push(_ viewBuilder: any ViewBuilding) {
         path.append(NavigationItem(id: viewBuilder.id, builder: viewBuilder))
+    }
+    
+    func pop(id: String) {
+        path = path.filter { $0.id != id }
     }
 }
 
