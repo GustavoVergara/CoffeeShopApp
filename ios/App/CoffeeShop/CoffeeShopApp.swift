@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import Core
 import Navigation
 import Menu
 import Checkout
@@ -32,6 +33,7 @@ struct TabBuider<MenuB: ViewBuilding, CartB: ViewBuilding>: ViewBuilding {
             menuBuilder.build()
             cartBuilder.build()
         }
+        .tint(R.color.darkGreen())
     }
 }
 
