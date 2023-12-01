@@ -1,29 +1,61 @@
 const express = require('express')
+const bodyParser = require('body-parser')
 const app = express()
 const port = process.env.PORT || 5000
 const filesystem = require('fs');
 const path = require('path');
 const rootPath = path.resolve(__dirname);
+const { v4: uuidv4 } = require('uuid');
 
 app.get("/store/:storeID/menu", (request, response) => {
-//   var menuJSON = filesystem.readFileSync(`jsons/store/${request.params.storeID}/menu.json`, "utf8")
-//   response.send(menuJSON)
   response.sendFile(`jsons/store/${request.params.storeID}/menu.json`, { root: rootPath })
 })
 
-// app.get("/game/:gameID", (request, response) => {
-//   var matchesJSON = JSON.parse(filesystem.readFileSync("jsons/games.json", "utf8"))
-//   var selectedMatch = matchesJSON.filter((el) => { return el.id == request.params.gameID })[0]
+app.post("/store/:storeID/order", bodyParser.json(), (request, response) => {
+  var uuid = uuidv4();
 
-//   if (selectedMatch != undefined) {
-//     response.send({
-//       "game": selectedMatch,
-//       "moves": JSON.parse(filesystem.readFileSync("jsons/moves.json", "utf8"))
-//     })
-//   } else {
-//     response.sendStatus(404);
-//   }
-// })
+
+  bodyJSON = request.body;
+  bodyJSON.order_id = uuid;
+  bodyJSON.date = new Date().toISOString();
+  bodyString = JSON.stringify(bodyJSON);
+
+  var storePath = `orders/${bodyJSON.user.id}/${request.params.storeID}`;
+  var orderPath = `${storePath}/${uuid}.json`;
+
+  console.log(`[${bodyJSON.date}] Registering Order '${uuid}'`);
+
+  filesystem.promises
+    .mkdir(storePath, { recursive: true })
+    .then(() => {
+      return filesystem.promises.writeFile(orderPath, bodyString, { root: rootPath });
+    })
+    .finally(() => {
+      response.status(200);
+      response.sendFile(orderPath, { root: rootPath });  
+    });
+})
+
+app.get("/store/:storeID/orders", bodyParser.json(), async (request, response) => {
+  var userID = request.query.userID;
+  if (userID == null) {
+    response.sendStatus(400);
+    return;
+  }
+  var responseBody = [];
+
+  const files = await filesystem.promises.readdir(`orders/${userID}/${request.params.storeID}`, { root: rootPath });
+  console.log(`Getting orders for {storeID: '${request.params.storeID}', userID: '${userID}'}`);
+
+  for (const file of files) {
+    const fileContents = await filesystem.promises.readFile(rootPath + `/orders/${userID}/${request.params.storeID}/` + file);
+    console.log(`-> File '${file}': ${fileContents}`);
+    responseBody.push(JSON.parse(fileContents));
+  }
+  
+  response.status(200);
+  response.send(responseBody);
+})
 
 app.use('/static', express.static(path.join(__dirname, 'public')))
 
