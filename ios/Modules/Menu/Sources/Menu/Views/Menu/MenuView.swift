@@ -6,6 +6,7 @@ import Navigation
 struct MenuView: View {
     let interactor: MenuInteracting
     @StateObject var viewModel: MenuViewModel
+    let openCartBuilder: any ViewBuilding
     
     @State var searchQuery = ""
 
@@ -32,6 +33,11 @@ struct MenuView: View {
         }
         .tabItem {
             Label("Menu", systemImage: "menucard.fill")
+        }
+        .safeAreaInset(edge: .bottom) {
+            if viewModel.isCartButtonPresented {
+                AnyView(openCartBuilder.build())
+            }
         }
     }
     
@@ -98,9 +104,15 @@ struct MenuItemView: View {
 }
 
 struct MenuView_Previews: PreviewProvider {
+    static let draftOrderStore = PreviewDraftOrderStore()
+    
     static var previews: some View {
         NavigationBuilder { stack in
-            MenuBuilder(navigationStack: stack, cartBuilder: PreviewViewBuilder(view: Color.blue), draftOrderStore: PreviewDraftOrderStore())
+            MenuBuilder(navigationStack: stack,
+                        cartBuilder: PreviewViewBuilder(view: Color.blue),
+                        openCartButtonBuilder: PreviewViewBuilder(view: Button("Open Cart", action: {})),
+                        draftOrderStore: draftOrderStore,
+                        draftOrderStream: draftOrderStore.stream)
         }.build().previewDisplayName("Live")
         NavigationBuilder { stack in
             PreviewMenuBuilder(navigationStack: stack)

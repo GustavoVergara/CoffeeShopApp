@@ -7,23 +7,25 @@ public struct MenuBuilder: ViewBuilding {
     
     let navigationStack: ViewStacking
     let cartBuilder: any ViewBuilding
+    let openCartButtonBuilder: any ViewBuilding
     let draftOrderStore: DraftOrderStoring
     
     private let viewModel: MenuViewModel
     private let interactor: MenuInteractor
 
     
-    public init(navigationStack: ViewStacking, cartBuilder: any ViewBuilding, draftOrderStore: DraftOrderStoring) {
+    public init(navigationStack: ViewStacking, cartBuilder: any ViewBuilding, openCartButtonBuilder: any ViewBuilding, draftOrderStore: DraftOrderStoring, draftOrderStream: DraftOrderStreaming) {
         self.navigationStack = navigationStack
         self.cartBuilder = cartBuilder
+        self.openCartButtonBuilder = openCartButtonBuilder
         self.draftOrderStore = draftOrderStore
         
         self.viewModel = MenuViewModel()
-        self.interactor = MenuInteractor(navigationStack: navigationStack, cartBuilder: cartBuilder, draftOrderStore: draftOrderStore, presenter: viewModel)
+        self.interactor = MenuInteractor(navigationStack: navigationStack, cartBuilder: cartBuilder, draftOrderStore: draftOrderStore, draftOrderStream: draftOrderStream, presenter: viewModel)
     }
 
     public func build() -> some View {
-        return MenuView(interactor: interactor, viewModel: viewModel)
+        return MenuView(interactor: interactor, viewModel: viewModel, openCartBuilder: openCartButtonBuilder)
     }
 }
 
@@ -35,7 +37,7 @@ struct PreviewMenuBuilder: ViewBuilding {
     func build() -> some View {
         let viewModel = MenuViewModel()
         let interactor = PreviewMenuInteractor(navigationStack: navigationStack, presenter: viewModel)
-        return MenuView(interactor: interactor, viewModel: viewModel)
+        return MenuView(interactor: interactor, viewModel: viewModel, openCartBuilder: PreviewViewBuilder(view: Button("Open Cart", action: {})))
     }
     
     class PreviewMenuInteractor: MenuInteracting {

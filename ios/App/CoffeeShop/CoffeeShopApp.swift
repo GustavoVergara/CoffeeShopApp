@@ -40,13 +40,17 @@ struct CoffeeShopApp: App {
         Dependencies.shared.userSessionWorker.start()
         return WindowGroup {
             NavigationBuilder { stack in
-                TabBuider(
-                    menuBuilder: MenuBuilder(
-                        navigationStack: stack,
-                        cartBuilder: Dependencies.shared.cartBuilder,
-                        draftOrderStore: Dependencies.shared.draftOrderStore
+                MenuBuilder(
+                    navigationStack: stack,
+                    cartBuilder: Dependencies.shared.cartBuilder,
+                    openCartButtonBuilder: OpenCartButtonBuilder(
+                        draftOrderStream: Dependencies.shared.draftOrderStream,
+                        draftOrderTotalStream: Dependencies.shared.draftOrderTotalStream,
+                        stacker: stack,
+                        cartBuilder: Dependencies.shared.cartBuilder
                     ),
-                    cartBuilder: Dependencies.shared.cartBuilder
+                    draftOrderStore: Dependencies.shared.draftOrderStore,
+                    draftOrderStream: Dependencies.shared.draftOrderStream
                 )
             }.build()
         }
@@ -73,23 +77,27 @@ struct CoffeeShopApp_Previews: PreviewProvider {
     
     static var previews: some View {
         NavigationBuilder { stack in
-            TabBuider(
-                menuBuilder: MenuBuilder(
-                    navigationStack: stack,
-                    cartBuilder: CartBuilder(
-                        draftOrderStore: draftOrderStore,
-                        draftOrderTotalStream: draftOrderStore.totalStream,
-                        mutableUserSessionStream: userSessionStream,
-                        draftOrderStream: draftOrderStore.stream
-                    ),
-                    draftOrderStore: Dependencies.shared.draftOrderStore
-                ),
+            MenuBuilder(
+                navigationStack: stack,
                 cartBuilder: CartBuilder(
                     draftOrderStore: draftOrderStore,
                     draftOrderTotalStream: draftOrderStore.totalStream,
                     mutableUserSessionStream: userSessionStream,
                     draftOrderStream: draftOrderStore.stream
-                )
+                ),
+                openCartButtonBuilder: OpenCartButtonBuilder(
+                    draftOrderStream: draftOrderStore.stream,
+                    draftOrderTotalStream: draftOrderStore.totalStream,
+                    stacker: stack,
+                    cartBuilder: CartBuilder(
+                        draftOrderStore: draftOrderStore,
+                        draftOrderTotalStream: draftOrderStore.totalStream,
+                        mutableUserSessionStream: userSessionStream,
+                        draftOrderStream: draftOrderStore.stream
+                    )
+                ),
+                draftOrderStore: draftOrderStore,
+                draftOrderStream: draftOrderStore.stream
             )
         }.build()
     }

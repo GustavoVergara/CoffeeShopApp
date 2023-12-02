@@ -5,12 +5,16 @@ protocol MenuPresenting {
     func presentLoading() async
     func presentMenu(_ menu: MenuResponse) async
     func presentError(_ error: Error) async
+    func presentOpenCartButton(_ isPresented: Bool)
 }
 
 class MenuViewModel: ObservableObject, MenuPresenting {
     let priceFormatter: PriceFormatting = PriceFormatter()
     @Published
     var state: MenuViewState = .loading
+    
+    @Published
+    var isCartButtonPresented: Bool = true
     
     @MainActor
     func presentLoading() async {
@@ -36,6 +40,10 @@ class MenuViewModel: ObservableObject, MenuPresenting {
     @MainActor
     func presentError(_ error: Error) async {
         state = .failed
+    }
+    
+    func presentOpenCartButton(_ isPresented: Bool) {
+        isCartButtonPresented = isPresented
     }
 }
 

@@ -1,4 +1,5 @@
 import Foundation
+import Combine
 import OrderLibrary
 import HTTP
 import Navigation
@@ -13,15 +14,30 @@ class MenuInteractor: MenuInteracting {
     let menuNetworker: MenuNetworking
     let cartBuilder: any ViewBuilding
     let draftOrderStore: DraftOrderStoring
+    let draftOrderStream: DraftOrderStreaming
     let presenter: MenuPresenting
+    
     private var menuResponse: MenuResponse?
+    private var cancellables = Set<AnyCancellable>()
 
-    init(menuNetworker: MenuNetworking = MenuNetworker(), navigationStack: ViewStacking, cartBuilder: any ViewBuilding, draftOrderStore: DraftOrderStoring, presenter: MenuPresenting) {
+    init(
+        menuNetworker: MenuNetworking = MenuNetworker(),
+        navigationStack: ViewStacking,
+        cartBuilder: any ViewBuilding,
+        draftOrderStore: DraftOrderStoring,
+        draftOrderStream: DraftOrderStreaming,
+        presenter: MenuPresenting
+    ) {
         self.menuNetworker = menuNetworker
         self.navigationStack = navigationStack
         self.cartBuilder = cartBuilder
         self.draftOrderStore = draftOrderStore
+        self.draftOrderStream = draftOrderStream
         self.presenter = presenter
+        
+        draftOrderStream.publisher().receive(on: DispatchQueue.main).sink { products in
+            presenter.presentOpenCartButton(products.count > 0)
+        }.store(in: &cancellables)
     }
     
     func didAppear() async {
