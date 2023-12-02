@@ -14,16 +14,17 @@ app.get("/store/:storeID/menu", (request, response) => {
 app.post("/store/:storeID/order", bodyParser.json(), (request, response) => {
   var uuid = uuidv4();
 
-
+  const date = new Date()
   bodyJSON = request.body;
   bodyJSON.order_id = uuid;
-  bodyJSON.date = new Date().toISOString();
+  bodyJSON.date = date.toISOString();
+  bodyJSON.expected_delivery_date = new Date(date.getTime() + 15*60000).toISOString();
   bodyString = JSON.stringify(bodyJSON);
 
   var storePath = `orders/${bodyJSON.user.id}/${request.params.storeID}`;
   var orderPath = `${storePath}/${uuid}.json`;
 
-  console.log(`[${bodyJSON.date}] Registering Order '${uuid}'`);
+  console.log(`[${bodyJSON.date}] Registering Order '${uuid}'. {"user": ${JSON.stringify(bodyJSON.user)}}`);
 
   filesystem.promises
     .mkdir(storePath, { recursive: true })
