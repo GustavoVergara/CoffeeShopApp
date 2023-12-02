@@ -14,6 +14,7 @@ let package = Package(
     ],
     dependencies: [
         // Dependencies declare other packages that this package depends on.
+        .package(path: "HTTP"),
         .package(path: "Core"),
         .package(path: "OrderLibrary"),
         .package(path: "Navigation"),
@@ -24,6 +25,7 @@ let package = Package(
         .target(
             name: "Checkout",
             dependencies: [
+                "HTTP",
                 "Core",
                 "OrderLibrary",
                 "Navigation",
