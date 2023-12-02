@@ -23,3 +23,24 @@ public class UserSessionStream: MutableUserSessionStreaming, ObservableObject {
         self.data = data
     }
 }
+
+ 
+public class PreviewUserSessionStream: MutableUserSessionStreaming {
+    let stream = {
+        let stream = UserSessionStream()
+        stream.emit(UserSession(id: "preview-id", name: "Gustavo (Preview)"))
+        return stream
+    }()
+    
+    public init() {}
+    
+    public var data: UserSession? { stream.data }
+    
+    public func emit(_ data: UserSession?) {
+        stream.emit(data)
+    }
+    
+    public func publisher() -> AnyPublisher<UserSession?, Never> {
+        stream.publisher()
+    }
+}

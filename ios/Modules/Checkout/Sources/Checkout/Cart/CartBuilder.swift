@@ -7,16 +7,26 @@ public struct CartBuilder: ViewBuilding {
     
     let draftOrderStore: DraftOrderStoring
     let draftOrderTotalStream: DraftOrderTotalStreaming
+    let mutableUserSessionStream: MutableUserSessionStreaming
+    let draftOrderStream: any DraftOrderStreaming
     
-    public init(draftOrderStore: DraftOrderStoring, draftOrderTotalStream: DraftOrderTotalStreaming) {
+    let viewModel: CartViewModel
+    let interactor: CartInteractor
+    let placeOrderButtonBuilder: PlaceOrderButtonBuilder
+    
+    public init(draftOrderStore: DraftOrderStoring, draftOrderTotalStream: DraftOrderTotalStreaming, mutableUserSessionStream: MutableUserSessionStreaming, draftOrderStream: any DraftOrderStreaming) {
         self.draftOrderStore = draftOrderStore
         self.draftOrderTotalStream = draftOrderTotalStream
+        self.mutableUserSessionStream = mutableUserSessionStream
+        self.draftOrderStream = draftOrderStream
+        
+        viewModel = CartViewModel()
+        interactor = CartInteractor(draftOrderStore: draftOrderStore, presenter: viewModel)
+        placeOrderButtonBuilder = PlaceOrderButtonBuilder(draftOrderStream: draftOrderStream, draftOrderTotalStream: draftOrderTotalStream, mutableUserSessionStream: mutableUserSessionStream)
     }
     
     public func build() -> some View {
-        let viewModel = CartViewModel()
-        let interactor = CartInteractor(draftOrderStore: draftOrderStore, presenter: viewModel)
-        return CartView(placeOrderButtonBuilder: PlaceOrderButtonBuilder(draftOrderTotalStream: draftOrderTotalStream), interactor: interactor, viewModel: viewModel)
+        return CartView(placeOrderButtonBuilder: placeOrderButtonBuilder, interactor: interactor, viewModel: viewModel)
     }
 }
 
@@ -29,6 +39,10 @@ struct PreviewCartBuilder: ViewBuilding {
         let draftOrderStore = PreviewDraftOrderStore(products: products)
         let viewModel = CartViewModel()
         let interactor = CartInteractor(draftOrderStore: draftOrderStore, presenter: viewModel)
-        return CartView(placeOrderButtonBuilder: PlaceOrderButtonBuilder(draftOrderTotalStream: draftOrderStore.totalStream), interactor: interactor, viewModel: viewModel)
+        return CartView(
+            placeOrderButtonBuilder: PlaceOrderButtonBuilder(draftOrderStream: draftOrderStore.stream, draftOrderTotalStream: draftOrderStore.totalStream, mutableUserSessionStream: PreviewUserSessionStream()),
+            interactor: interactor,
+            viewModel: viewModel
+        )
     }
 }

@@ -18,6 +18,17 @@ class Dependencies {
     let draftOrderStream = DraftOrderStream()
     lazy var draftOrderTotalStream = DraftOrderTotalStream(draftOrderStream: draftOrderStream)
     lazy var draftOrderStore = DraftOrderStore(stream: draftOrderStream)
+    
+    let userSessionStream = UserSessionStream()
+    
+    var cartBuilder: some ViewBuilding {
+        CartBuilder(
+            draftOrderStore: Dependencies.shared.draftOrderStore,
+            draftOrderTotalStream: Dependencies.shared.draftOrderTotalStream,
+            mutableUserSessionStream: Dependencies.shared.userSessionStream,
+            draftOrderStream: Dependencies.shared.draftOrderStream
+        )
+    }
 }
 
 @main
@@ -29,16 +40,10 @@ struct CoffeeShopApp: App {
                 TabBuider(
                     menuBuilder: MenuBuilder(
                         navigationStack: stack,
-                        cartBuilder: CartBuilder(
-                            draftOrderStore: Dependencies.shared.draftOrderStore,
-                            draftOrderTotalStream: Dependencies.shared.draftOrderTotalStream
-                        ),
+                        cartBuilder: Dependencies.shared.cartBuilder,
                         draftOrderStore: Dependencies.shared.draftOrderStore
                     ),
-                    cartBuilder: CartBuilder(
-                        draftOrderStore: Dependencies.shared.draftOrderStore,
-                        draftOrderTotalStream: Dependencies.shared.draftOrderTotalStream
-                    )
+                    cartBuilder: Dependencies.shared.cartBuilder
                 )
             }.build()
         }
@@ -61,6 +66,7 @@ struct TabBuider<MenuB: ViewBuilding, CartB: ViewBuilding>: ViewBuilding {
 
 struct CoffeeShopApp_Previews: PreviewProvider {
     static let draftOrderStore = PreviewDraftOrderStore()
+    static let userSessionStream = PreviewUserSessionStream()
     
     static var previews: some View {
         NavigationBuilder { stack in
@@ -69,13 +75,17 @@ struct CoffeeShopApp_Previews: PreviewProvider {
                     navigationStack: stack,
                     cartBuilder: CartBuilder(
                         draftOrderStore: draftOrderStore,
-                        draftOrderTotalStream: draftOrderStore.totalStream
+                        draftOrderTotalStream: draftOrderStore.totalStream,
+                        mutableUserSessionStream: userSessionStream,
+                        draftOrderStream: draftOrderStore.stream
                     ),
                     draftOrderStore: Dependencies.shared.draftOrderStore
                 ),
                 cartBuilder: CartBuilder(
                     draftOrderStore: draftOrderStore,
-                    draftOrderTotalStream: draftOrderStore.totalStream
+                    draftOrderTotalStream: draftOrderStore.totalStream,
+                    mutableUserSessionStream: userSessionStream,
+                    draftOrderStream: draftOrderStore.stream
                 )
             )
         }.build()

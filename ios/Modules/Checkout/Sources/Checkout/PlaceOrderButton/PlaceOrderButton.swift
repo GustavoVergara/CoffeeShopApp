@@ -25,8 +25,8 @@ struct PlaceOrderButton: View {
         .tint(R.color.darkGreen())
         .alert("Qual o seu nome?", isPresented: $viewModel.isConfirmationPresented) {
             TextField("Digite seu nome", text: $userName)
-            Button {
-                interactor.didConfirmOrder(name: userName)
+            AsyncButton {
+                await interactor.didConfirmOrder(name: userName)
             } label: {
                 Text("Fazer o pedido")
             }
@@ -43,6 +43,6 @@ struct PlaceOrderButton: View {
 
 struct PlaceOrderButton_Preview: PreviewProvider {
     static var previews: some View {
-        PlaceOrderButtonBuilder(draftOrderTotalStream: PreviewDraftOrderStore().totalStream).build()
+        PreviewPlaceOrderButtonBuilder().build()
     }
 }
