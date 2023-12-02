@@ -1,10 +1,12 @@
 import SwiftUI
 import Core
 import Navigation
+import OrderLibrary
 
 struct ProductDetailBuilder: ViewBuilding {
     var id: String { "productDetail/\(product.id)" }
     
+    let draftOrderStoring: DraftOrderStoring
     let navigationStack: ViewStacking
     let cartBuilder: any ViewBuilding
     let product: ProductResponse
@@ -14,6 +16,7 @@ struct ProductDetailBuilder: ViewBuilding {
         let customizationWorker = ProductCustomizationWorker(productCustomizationStream: customizationStream, product: product)
         let addToDraftOrderButtonBuilder = AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker,
                                                                         productCustomizationStream: customizationStream,
+                                                                        draftOrderStoring: draftOrderStoring,
                                                                         navigationStack: navigationStack,
                                                                         cartBuilder: cartBuilder,
                                                                         product: product)
@@ -111,6 +114,7 @@ struct PreviewProductDetailBuilder: ViewBuilding {
             viewModel: viewModel,
             addToDraftOrderButtonBuilder: AddToDraftOrderButtonBuilder(productCustomizationWorker: customizationWorker,
                                                                        productCustomizationStream: stream,
+                                                                       draftOrderStoring: PreviewDraftOrderStore(),
                                                                        navigationStack: navigationStack,
                                                                        cartBuilder: PreviewViewBuilder(view: Color.blue),
                                                                        product: product)

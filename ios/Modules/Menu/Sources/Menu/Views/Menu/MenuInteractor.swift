@@ -1,4 +1,5 @@
 import Foundation
+import OrderLibrary
 import HTTP
 import Navigation
 
@@ -11,13 +12,15 @@ class MenuInteractor: MenuInteracting {
     let navigationStack: ViewStacking
     let menuNetworker: MenuNetworking
     let cartBuilder: any ViewBuilding
+    let draftOrderStore: DraftOrderStoring
     let presenter: MenuPresenting
     private var menuResponse: MenuResponse?
 
-    init(menuNetworker: MenuNetworking = MenuNetworker(), navigationStack: ViewStacking, cartBuilder: any ViewBuilding, presenter: MenuPresenting) {
+    init(menuNetworker: MenuNetworking = MenuNetworker(), navigationStack: ViewStacking, cartBuilder: any ViewBuilding, draftOrderStore: DraftOrderStoring, presenter: MenuPresenting) {
         self.menuNetworker = menuNetworker
         self.navigationStack = navigationStack
         self.cartBuilder = cartBuilder
+        self.draftOrderStore = draftOrderStore
         self.presenter = presenter
     }
     
@@ -38,6 +41,6 @@ class MenuInteractor: MenuInteracting {
             return
         }
         
-        navigationStack.push(ProductDetailBuilder(navigationStack: navigationStack, cartBuilder: cartBuilder, product: product))
+        navigationStack.push(ProductDetailBuilder(draftOrderStoring: draftOrderStore, navigationStack: navigationStack, cartBuilder: cartBuilder, product: product))
     }
 }

@@ -14,6 +14,7 @@ struct AddToDraftOrderButtonBuilder: ViewBuilding {
     
     let productCustomizationWorker: ProductCustomizationWorking
     let productCustomizationStream: ProductCustomizationStreaming
+    let draftOrderStoring: DraftOrderStoring
     let navigationStack: ViewStacking
     let cartBuilder: any ViewBuilding
     let product: ProductResponse
@@ -24,7 +25,7 @@ struct AddToDraftOrderButtonBuilder: ViewBuilding {
                                                        canAddToDraftOrder: true)
         let interactor = AddToDraftOrderInteractor(productCustomizationWorker: productCustomizationWorker,
                                                    productCustomizationStream: productCustomizationStream,
-                                                   draftOrderStore: DraftOrderStore(),
+                                                   draftOrderStore: draftOrderStoring,
                                                    navigationStack: navigationStack,
                                                    cartBuilder: cartBuilder,
                                                    presenter: viewModel,
@@ -100,7 +101,7 @@ struct AddToDraftOrderButtonBuilderPreview: ViewBuilding {
                                                        canAddToDraftOrder: data.hasSelectedAllRequiredCustomizations)
         let interactor = AddToDraftOrderInteractor(productCustomizationWorker: customizationWorker,
                                                    productCustomizationStream: stream,
-                                                   draftOrderStore: DraftOrderStore(),
+                                                   draftOrderStore: PreviewDraftOrderStore(),
                                                    navigationStack: navigationStack,
                                                    cartBuilder: PreviewViewBuilder(view: Color.blue),
                                                    presenter: viewModel,

@@ -10,14 +10,36 @@ import Core
 import Navigation
 import Menu
 import Checkout
+import OrderLibrary
+
+class Dependencies {
+    static let shared = Dependencies()
+    
+    let draftOrderStream = DraftOrderStream()
+    lazy var draftOrderTotalStream = DraftOrderTotalStream(draftOrderStream: draftOrderStream)
+    lazy var draftOrderStore = DraftOrderStore(stream: draftOrderStream)
+}
 
 @main
 struct CoffeeShopApp: App {
+    
     var body: some Scene {
         WindowGroup {
             NavigationBuilder { stack in
-                TabBuider(menuBuilder: MenuBuilder(navigationStack: stack, cartBuilder: CartBuilder()),
-                          cartBuilder: CartBuilder())
+                TabBuider(
+                    menuBuilder: MenuBuilder(
+                        navigationStack: stack,
+                        cartBuilder: CartBuilder(
+                            draftOrderStore: Dependencies.shared.draftOrderStore,
+                            draftOrderTotalStream: Dependencies.shared.draftOrderTotalStream
+                        ),
+                        draftOrderStore: Dependencies.shared.draftOrderStore
+                    ),
+                    cartBuilder: CartBuilder(
+                        draftOrderStore: Dependencies.shared.draftOrderStore,
+                        draftOrderTotalStream: Dependencies.shared.draftOrderTotalStream
+                    )
+                )
             }.build()
         }
     }
@@ -38,11 +60,23 @@ struct TabBuider<MenuB: ViewBuilding, CartB: ViewBuilding>: ViewBuilding {
 }
 
 struct CoffeeShopApp_Previews: PreviewProvider {
+    static let draftOrderStore = PreviewDraftOrderStore()
+    
     static var previews: some View {
         NavigationBuilder { stack in
             TabBuider(
-                menuBuilder: MenuBuilder(navigationStack: stack, cartBuilder: CartBuilder()),
-                cartBuilder: CartBuilder()
+                menuBuilder: MenuBuilder(
+                    navigationStack: stack,
+                    cartBuilder: CartBuilder(
+                        draftOrderStore: draftOrderStore,
+                        draftOrderTotalStream: draftOrderStore.totalStream
+                    ),
+                    draftOrderStore: Dependencies.shared.draftOrderStore
+                ),
+                cartBuilder: CartBuilder(
+                    draftOrderStore: draftOrderStore,
+                    draftOrderTotalStream: draftOrderStore.totalStream
+                )
             )
         }.build()
     }

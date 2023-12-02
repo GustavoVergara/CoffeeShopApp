@@ -1,4 +1,5 @@
 import SwiftUI
+import OrderLibrary
 import Navigation
 
 public struct MenuBuilder: ViewBuilding {
@@ -6,15 +7,17 @@ public struct MenuBuilder: ViewBuilding {
     
     let navigationStack: ViewStacking
     let cartBuilder: any ViewBuilding
+    let draftOrderStore: DraftOrderStoring
     
-    public init(navigationStack: ViewStacking, cartBuilder: any ViewBuilding) {
+    public init(navigationStack: ViewStacking, cartBuilder: any ViewBuilding, draftOrderStore: DraftOrderStoring) {
         self.navigationStack = navigationStack
         self.cartBuilder = cartBuilder
+        self.draftOrderStore = draftOrderStore
     }
 
     public func build() -> some View {
         let viewModel = MenuViewModel()
-        let interactor = MenuInteractor(navigationStack: navigationStack, cartBuilder: cartBuilder, presenter: viewModel)
+        let interactor = MenuInteractor(navigationStack: navigationStack, cartBuilder: cartBuilder, draftOrderStore: draftOrderStore, presenter: viewModel)
         return MenuView(interactor: interactor, viewModel: viewModel)
     }
 }
@@ -49,7 +52,11 @@ struct PreviewMenuBuilder: ViewBuilding {
         }
         
         func didSelectItem(id: String) {
-            navigationStack.push(ProductDetailBuilder(navigationStack: navigationStack, cartBuilder: PreviewViewBuilder(view: Color.blue), product: Stub.Product.cappuccino))
+            let builder = ProductDetailBuilder(draftOrderStoring: PreviewDraftOrderStore(),
+                                               navigationStack: navigationStack,
+                                               cartBuilder: PreviewViewBuilder(view: Color.blue),
+                                               product: Stub.Product.cappuccino)
+            navigationStack.push(builder)
         }
         
         enum Stub {

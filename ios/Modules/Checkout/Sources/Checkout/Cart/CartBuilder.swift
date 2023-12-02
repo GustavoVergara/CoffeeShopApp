@@ -5,12 +5,18 @@ import OrderLibrary
 public struct CartBuilder: ViewBuilding {
     public var id: String { "cart" }
     
-    public init() {}
+    let draftOrderStore: DraftOrderStoring
+    let draftOrderTotalStream: DraftOrderTotalStreaming
+    
+    public init(draftOrderStore: DraftOrderStoring, draftOrderTotalStream: DraftOrderTotalStreaming) {
+        self.draftOrderStore = draftOrderStore
+        self.draftOrderTotalStream = draftOrderTotalStream
+    }
     
     public func build() -> some View {
         let viewModel = CartViewModel()
-        let interactor = CartInteractor(draftOrderStore: DraftOrderStore(), presenter: viewModel)
-        return CartView(interactor: interactor, viewModel: viewModel)
+        let interactor = CartInteractor(draftOrderStore: draftOrderStore, presenter: viewModel)
+        return CartView(placeOrderButtonBuilder: PlaceOrderButtonBuilder(draftOrderTotalStream: draftOrderTotalStream), interactor: interactor, viewModel: viewModel)
     }
 }
 
@@ -20,40 +26,9 @@ struct PreviewCartBuilder: ViewBuilding {
     var products: [DraftOrderProduct]
     
     func build() -> some View {
+        let draftOrderStore = PreviewDraftOrderStore(products: products)
         let viewModel = CartViewModel()
-        let interactor = CartInteractor(draftOrderStore: PreviewDraftOrderStore(products: products), presenter: viewModel)
-        return CartView(interactor: interactor, viewModel: viewModel)
-    }
-    
-    class PreviewDraftOrderStore: DraftOrderStoring {
-        var products: [DraftOrderProduct]
-        
-        init(products: [DraftOrderProduct]) {
-            self.products = products
-        }
-        
-        func getProducts() -> [DraftOrderProduct] {
-            products
-        }
-        
-        func addProduct(_ product: DraftOrderProduct) {
-            products.append(product)
-        }
-        
-        func updateProductQuantity(id: String, skuID: String, quantity: Int) {
-            guard let index = products.firstIndex(where: { $0.id == id && $0.sku.id == skuID }) else {
-                return
-            }
-            var product = products[index]
-            product.quantity = quantity
-            products[index] = product
-        }
-        
-        func removeProduct(id: String, skuID: String) {
-            guard let index = products.firstIndex(where: { $0.id == id && $0.sku.id == skuID }) else {
-                return
-            }
-            products.remove(at: index)
-        }
+        let interactor = CartInteractor(draftOrderStore: draftOrderStore, presenter: viewModel)
+        return CartView(placeOrderButtonBuilder: PlaceOrderButtonBuilder(draftOrderTotalStream: draftOrderStore.totalStream), interactor: interactor, viewModel: viewModel)
     }
 }

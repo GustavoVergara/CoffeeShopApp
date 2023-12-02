@@ -7,18 +7,23 @@ public protocol DraftOrderStoring {
 
 public class DraftOrderStore: DraftOrderStoring {
     let store: CodableStoring
+    let stream: any MutableDraftOrderStreaming
+
     let storageKey = "draft-order"
     
-    init(store: CodableStoring) {
+    init(store: CodableStoring, stream: any MutableDraftOrderStreaming) {
         self.store = store
+        self.stream = stream
+        
+        stream.emit(getProducts())
     }
     
-    public convenience init() {
-        self.init(store: DiskStorage())
+    public convenience init(stream: any MutableDraftOrderStreaming) {
+        self.init(store: DiskStorage(), stream: stream)
     }
     
     public func addProduct(_ product: DraftOrderProduct) {
-        var draftOrderProducts = store.object([DraftOrderProduct].self, forKey: storageKey) ?? []
+        var draftOrderProducts = stream.data
         if let addedProductIndex = draftOrderProducts.firstIndex(where: { $0.id == product.id && $0.sku.id == product.sku.id }) {
             var addedProduct = draftOrderProducts[addedProductIndex]
             addedProduct.quantity += product.quantity
@@ -27,21 +32,23 @@ public class DraftOrderStore: DraftOrderStoring {
             draftOrderProducts.append(product)
         }
         store.store(draftOrderProducts, forKey: storageKey)
+        stream.emit(draftOrderProducts)
     }
     
     public func removeProduct(id: String, skuID: String) {
-        var products = store.object([DraftOrderProduct].self, forKey: storageKey) ?? []
+        var products = stream.data
         guard let addedProductIndex = products.firstIndex(where: { $0.id == id && $0.sku.id == skuID }) else {
             return
         }
         
         products.remove(at: addedProductIndex)
         store.store(products, forKey: storageKey)
+        stream.emit(products)
     }
     
     public func updateProductQuantity(id: String, skuID: String, quantity: Int) {
+        var draftOrderProducts = stream.data
         guard
-            var draftOrderProducts = store.object([DraftOrderProduct].self, forKey: storageKey),
             let addedProductIndex = draftOrderProducts.firstIndex(where: { $0.id == id && $0.sku.id == skuID })
         else {
             return
@@ -49,6 +56,7 @@ public class DraftOrderStore: DraftOrderStoring {
         
         draftOrderProducts[addedProductIndex].quantity = quantity
         store.store(draftOrderProducts, forKey: storageKey)
+        stream.emit(draftOrderProducts)
     }
     
     public func getProducts() -> [DraftOrderProduct] {

@@ -1,4 +1,5 @@
 import SwiftUI
+import OrderLibrary
 import Core
 import Navigation
 
@@ -99,7 +100,7 @@ struct MenuItemView: View {
 struct MenuView_Previews: PreviewProvider {
     static var previews: some View {
         NavigationBuilder { stack in
-            MenuBuilder(navigationStack: stack, cartBuilder: PreviewViewBuilder(view: Color.blue))
+            MenuBuilder(navigationStack: stack, cartBuilder: PreviewViewBuilder(view: Color.blue), draftOrderStore: PreviewDraftOrderStore())
         }.build().previewDisplayName("Live")
         NavigationBuilder { stack in
             PreviewMenuBuilder(navigationStack: stack)
