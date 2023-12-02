@@ -103,7 +103,7 @@ struct PreviewProductDetailBuilder: ViewBuilding {
             id: product.id,
             name: product.name,
             description: product.description,
-            image: R.image.cappuccino(),
+            image: CoreImage.image(R.image.cappuccino()),
             price: "a partir de R$ 10,00",
             customizationSections: data.sections
         )

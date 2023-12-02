@@ -33,8 +33,9 @@ struct ProductDetailView<AddToDraftOrderButtonBuild: ViewBuilding>: View {
     
     var header: some View {
         Group {
-            R.image.cappuccino()
-                .resizable()
+            R.color.darkGreen()
+                .ignoresSafeArea(.all, edges: .top)
+            viewModel.image
                 .aspectRatio(contentMode: .fit)
             VStack(alignment: .leading, spacing: 8) {
                 Text(viewModel.name)

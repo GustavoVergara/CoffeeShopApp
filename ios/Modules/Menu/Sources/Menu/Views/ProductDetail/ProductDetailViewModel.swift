@@ -5,7 +5,7 @@ class ProductDetailViewModel: ObservableObject, ProductDetailPresenting {
     var id: String
     var name: String
     var description: String
-    var image: any View
+    var image: CoreImage
     var price: String
     @Published var customizationSections: [ProductCustomizationSection]
     
@@ -13,7 +13,7 @@ class ProductDetailViewModel: ObservableObject, ProductDetailPresenting {
          id: String,
          name: String,
          description: String,
-         image: any View,
+         image: CoreImage,
          price: String,
          customizationSections: [ProductCustomizationSection]) {
         self.id = id
@@ -29,7 +29,7 @@ class ProductDetailViewModel: ObservableObject, ProductDetailPresenting {
             id: product.id,
             name: product.name,
             description: product.description,
-            image: product.photo.flatMap { URL(string: $0) }.map { CoreImage.url($0) },
+            image: product.photo.flatMap { URL(string: $0) }.map { CoreImage.url($0) } ?? CoreImage.system("cup.and.saucer.fill"),
             price: priceFormatter.minimunDisplayPrice(in: product.skus),
             customizationSections: customizationSections
         )
