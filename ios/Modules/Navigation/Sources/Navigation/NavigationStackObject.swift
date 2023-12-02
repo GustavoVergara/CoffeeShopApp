@@ -3,6 +3,7 @@ import SwiftUI
 public protocol ViewStacking {
     func push(_ viewBuilder: any ViewBuilding)
     func pop(id: String)
+    func popToRoot()
 }
 
 class NavigationStackObject: ObservableObject, ViewStacking {
@@ -23,6 +24,10 @@ class NavigationStackObject: ObservableObject, ViewStacking {
     
     func pop(id: String) {
         path = path.filter { $0.id != id }
+    }
+    
+    func popToRoot() {
+        path = []
     }
 }
 

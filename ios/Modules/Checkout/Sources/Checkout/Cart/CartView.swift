@@ -76,17 +76,15 @@ struct CartItemView: View {
 
 struct CartView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationStack {
-            TabView {
-                PreviewCartBuilder(products: [
-                    DraftOrderProduct(id: "prod-id-capp", name: "Capp", imageURL: nil,
-                                      sku: DraftOrderSKU(id: "sku-id", price: 10, attributes: [:]),
-                                      quantity: 1),
-                    DraftOrderProduct(id: "prod-id-expr", name: "Espresso", imageURL: nil,
-                                      sku: DraftOrderSKU(id: "sku-id-2", price: 5, attributes: [:]),
-                                      quantity: 2),
-                ]).build()
-            }
-        }.previewDisplayName("Preview")
+        NavigationBuilder { stacker in
+            PreviewCartBuilder(stacker: stacker, products: [
+                DraftOrderProduct(id: "prod-id-capp", name: "Capp", imageURL: nil,
+                                  sku: DraftOrderSKU(id: "sku-id", price: 10, attributes: [:]),
+                                  quantity: 1),
+                DraftOrderProduct(id: "prod-id-expr", name: "Espresso", imageURL: nil,
+                                  sku: DraftOrderSKU(id: "sku-id-2", price: 5, attributes: [:]),
+                                  quantity: 2),
+            ])
+        }.build().previewDisplayName("Preview")
     }
 }

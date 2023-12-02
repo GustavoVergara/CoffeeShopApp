@@ -41,7 +41,7 @@ struct OpenCartButton_Previews: PreviewProvider {
                 draftOrderStream: draftOrderStore.stream,
                 draftOrderTotalStream: draftOrderStore.totalStream,
                 stacker: stack,
-                cartBuilder: PreviewCartBuilder(products: [])
+                cartBuilder: PreviewCartBuilder(stacker: stack, products: [])
             )
         }.build()
     }

@@ -1,6 +1,7 @@
 import SwiftUI
 import Core
 import OrderLibrary
+import Navigation
 
 struct PlaceOrderButton: View {
     let interactor: PlaceOrderInteractor
@@ -41,6 +42,8 @@ struct PlaceOrderButton: View {
 
 struct PlaceOrderButton_Preview: PreviewProvider {
     static var previews: some View {
-        PreviewPlaceOrderButtonBuilder().build()
+        NavigationBuilder { stacker in
+            PreviewPlaceOrderButtonBuilder(stacker: stacker)
+        }.build()
     }
 }

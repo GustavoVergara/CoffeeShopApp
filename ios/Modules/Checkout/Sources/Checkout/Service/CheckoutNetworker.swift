@@ -1,8 +1,9 @@
 import Foundation
 import HTTP
+import Core
 
 protocol CheckoutNetworking {
-    func placeOrder(_ order: OrderNetworkObject) async throws
+    func placeOrder(_ order: OrderNetworkObject) async throws -> PlaceOrderResponse
     func getOrders(userID: String) async throws -> [OrderNetworkObject]
 }
 
@@ -19,13 +20,16 @@ struct CheckoutNetworker: CheckoutNetworking {
     ) {
         self.httpClient = httpClient
         self.jsonDecoder = jsonDecoder
+        
+        jsonDecoder.dateDecodingStrategy = .iso8601WithSeconds
     }
     
-    func placeOrder(_ order: OrderNetworkObject) async throws {
+    func placeOrder(_ order: OrderNetworkObject) async throws -> PlaceOrderResponse {
         let response = try await httpClient.request(CheckoutEndpointRoute.placeOrder(storeID: "0", order: order))
         guard 200 <= response.response.statusCode || response.response.statusCode < 300 else {
             throw CheckoutError.unknowError
         }
+        return try jsonDecoder.decode(PlaceOrderResponse.self, from: response.body)
     }
     
     func getOrders(userID: String) async throws -> [OrderNetworkObject] {

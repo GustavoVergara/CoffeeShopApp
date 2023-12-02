@@ -21,3 +21,15 @@ struct SKUNetworkObject: Codable {
         case productName = "product_name"
     }
 }
+
+struct PlaceOrderResponse: Codable {
+    var orderID: String
+    var date: Date
+    var expectedDeliveryDate: Date
+    
+    enum CodingKeys: String, CodingKey {
+        case orderID = "order_id"
+        case date
+        case expectedDeliveryDate = "expected_delivery_date"
+    }
+}

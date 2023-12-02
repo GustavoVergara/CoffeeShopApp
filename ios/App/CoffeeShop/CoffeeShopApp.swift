@@ -24,12 +24,13 @@ class Dependencies {
     let userSessionStream = UserSessionStream()
     lazy var userSessionWorker = UserSessionWorker(mutableUserSessionStream: userSessionStream)
     
-    var cartBuilder: some ViewBuilding {
+    func cartBuilder(stacker: ViewStacking) -> some ViewBuilding {
         CartBuilder(
             draftOrderStore: Dependencies.shared.draftOrderStore,
             draftOrderTotalStream: Dependencies.shared.draftOrderTotalStream,
             mutableUserSessionStream: Dependencies.shared.userSessionStream,
-            draftOrderStream: Dependencies.shared.draftOrderStream
+            draftOrderStream: Dependencies.shared.draftOrderStream,
+            stacker: stacker
         )
     }
 }
@@ -42,12 +43,12 @@ struct CoffeeShopApp: App {
             NavigationBuilder { stack in
                 MenuBuilder(
                     navigationStack: stack,
-                    cartBuilder: Dependencies.shared.cartBuilder,
+                    cartBuilder: Dependencies.shared.cartBuilder(stacker: stack),
                     openCartButtonBuilder: OpenCartButtonBuilder(
                         draftOrderStream: Dependencies.shared.draftOrderStream,
                         draftOrderTotalStream: Dependencies.shared.draftOrderTotalStream,
                         stacker: stack,
-                        cartBuilder: Dependencies.shared.cartBuilder
+                        cartBuilder: Dependencies.shared.cartBuilder(stacker: stack)
                     ),
                     draftOrderStore: Dependencies.shared.draftOrderStore,
                     draftOrderStream: Dependencies.shared.draftOrderStream
@@ -83,7 +84,8 @@ struct CoffeeShopApp_Previews: PreviewProvider {
                     draftOrderStore: draftOrderStore,
                     draftOrderTotalStream: draftOrderStore.totalStream,
                     mutableUserSessionStream: userSessionStream,
-                    draftOrderStream: draftOrderStore.stream
+                    draftOrderStream: draftOrderStore.stream,
+                    stacker: stack
                 ),
                 openCartButtonBuilder: OpenCartButtonBuilder(
                     draftOrderStream: draftOrderStore.stream,
@@ -93,7 +95,8 @@ struct CoffeeShopApp_Previews: PreviewProvider {
                         draftOrderStore: draftOrderStore,
                         draftOrderTotalStream: draftOrderStore.totalStream,
                         mutableUserSessionStream: userSessionStream,
-                        draftOrderStream: draftOrderStore.stream
+                        draftOrderStream: draftOrderStore.stream,
+                        stacker: stack
                     )
                 ),
                 draftOrderStore: draftOrderStore,

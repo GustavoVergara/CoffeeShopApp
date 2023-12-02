@@ -1,6 +1,7 @@
 import Foundation
 import Combine
 import OrderLibrary
+import Navigation
 
 protocol PlaceOrderInteracting {
     func didPressPlaceOrder()
@@ -12,6 +13,7 @@ class PlaceOrderInteractor: PlaceOrderInteracting {
     let draftOrderStream: any DraftOrderStreaming
     let draftOrderTotalStream: DraftOrderTotalStreaming
     let mutableUserSessionStream: MutableUserSessionStreaming
+    let stacker: ViewStacking
     let checkoutNetworker: CheckoutNetworking
     let presenter: PlaceOrderPresenter
     private var cancellables = Set<AnyCancellable>()
@@ -21,6 +23,7 @@ class PlaceOrderInteractor: PlaceOrderInteracting {
         draftOrderStream: any DraftOrderStreaming,
         draftOrderTotalStream: DraftOrderTotalStreaming,
         mutableUserSessionStream: MutableUserSessionStreaming,
+        stacker: ViewStacking,
         checkoutNetworker: CheckoutNetworking = CheckoutNetworker(),
         presenter: PlaceOrderPresenter
     ) {
@@ -28,6 +31,7 @@ class PlaceOrderInteractor: PlaceOrderInteracting {
         self.draftOrderStream = draftOrderStream
         self.draftOrderTotalStream = draftOrderTotalStream
         self.mutableUserSessionStream = mutableUserSessionStream
+        self.stacker = stacker
         self.checkoutNetworker = checkoutNetworker
         self.presenter = presenter
         
@@ -54,14 +58,18 @@ class PlaceOrderInteractor: PlaceOrderInteracting {
         
         let order = orderNetworkObject(name: name)
         do {
-            try await checkoutNetworker.placeOrder(order)
-            draftOrderStore.clear()
-            print("Successfuly placed order")
-            // present success screen
+            let response = try await checkoutNetworker.placeOrder(order)
+            await onSuccessfulPlaceOrder(response)
         } catch {
             // do something when it fails
             print("Failed to place order, error: '\(error)'")
         }
+    }
+    
+    @MainActor
+    private func onSuccessfulPlaceOrder(_ response: PlaceOrderResponse) {
+        draftOrderStore.clear()
+        stacker.push(OrderPlacedBuilder(stacker: stacker, response: response))
     }
     
     private func orderNetworkObject(name: String) -> OrderNetworkObject {
