@@ -1,8 +1,10 @@
 import SwiftUI
 import Core
 import OrderLibrary
+import Navigation
 
-struct CartView: View {
+struct CartView<POBBuilder: ViewBuilding>: View {
+    let placeOrderButtonBuilder: POBBuilder
     let interactor: CartInteracting
     @ObservedObject var viewModel: CartViewModel
 
@@ -27,20 +29,7 @@ struct CartView: View {
             }
         }
         .safeAreaInset(edge: .bottom) {
-            Button {
-                print("Tapped place order button")
-            } label: {
-                HStack {
-                    Text("Pedir")
-                        .font(.system(size: 24, weight: .semibold))
-                    Spacer().frame(maxWidth: 100)
-                    Text(viewModel.totalPrice)
-                }.padding(4)
-            }
-            .buttonStyle(.borderedProminent)
-            .cornerRadius(24)
-            .padding()
-            .tint(R.color.darkGreen())
+            placeOrderButtonBuilder.build()
         }
         .tabItem {
             Label("Carrinho", systemImage: "cart.fill")
@@ -87,12 +76,6 @@ struct CartItemView: View {
 
 struct CartView_Previews: PreviewProvider {
     static var previews: some View {
-        NavigationStack {
-            TabView {
-                CartBuilder().build()
-            }
-        }.previewDisplayName("Live")
-
         NavigationStack {
             TabView {
                 PreviewCartBuilder(products: [
