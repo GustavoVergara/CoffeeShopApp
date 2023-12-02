@@ -59,10 +59,10 @@
             "photo": "http://localhost:5000/static/Cappuccino.png",
             "skus": [
                 {
-                    "id": "capp-g",
-                    "price": 14,
+                    "id": "capp-p",
+                    "price": 10,
                     "attributes": {
-                        "tamanho": "Grande 400ml"
+                        "tamanho": "Pequeno 200ml"
                     }
                 },
                 {
@@ -73,10 +73,10 @@
                     }
                 },
                 {
-                    "id": "capp-p",
-                    "price": 10,
+                    "id": "capp-g",
+                    "price": 14,
                     "attributes": {
-                        "tamanho": "Pequeno 200ml"
+                        "tamanho": "Grande 400ml"
                     }
                 }
             ],
@@ -94,24 +94,94 @@
             "photo": "http://localhost:5000/static/FlatWhite.png",
             "skus": [
                 {
-                    "id": "flat-white-g",
-                    "price": 14,
+                    "id": "flat-p",
+                    "price": 10,
                     "attributes": {
-                        "tamanho": "Grande 400ml"
+                        "tamanho": "Pequeno 200ml"
                     }
                 },
                 {
-                    "id": "flat-white-m",
+                    "id": "flat-m",
                     "price": 12,
                     "attributes": {
                         "tamanho": "Médio 300ml"
                     }
                 },
                 {
-                    "id": "flat-white-p",
-                    "price": 10,
+                    "id": "flat-g",
+                    "price": 14,
+                    "attributes": {
+                        "tamanho": "Grande 400ml"
+                    }
+                }
+            ],
+            "all_attributes" : [
+                {
+                    "key": "tamanho",
+                    "name": "Tamanho"
+                }
+            ]
+        },
+        {
+            "id": "iced-pumpkin-spice-latte",
+            "name": "Iced Pumpkin Spice Latte",
+            "description": "Xarope de Pumpkin Spice com leite e café espresso. Servido com gelo e chantily.",
+            "photo": "http://localhost:5000/static/IcedPumpkinSpiceLatte.png",
+            "skus": [
+                {
+                    "id": "ipsl-p",
+                    "price": 11.50,
                     "attributes": {
                         "tamanho": "Pequeno 200ml"
+                    }
+                },
+                {
+                    "id": "ipsl-m",
+                    "price": 13.50,
+                    "attributes": {
+                        "tamanho": "Médio 300ml"
+                    }
+                },
+                {
+                    "id": "ipsl-g",
+                    "price": 15.50,
+                    "attributes": {
+                        "tamanho": "Grande 400ml"
+                    }
+                }
+            ],
+            "all_attributes" : [
+                {
+                    "key": "tamanho",
+                    "name": "Tamanho"
+                }
+            ]
+        },
+        {
+            "id": "pumpkin-spice-latte",
+            "name": "Pumpkin Spice Latte",
+            "description": "Xarope de Pumpkin Spice com leite e café espresso.",
+            "photo": "http://localhost:5000/static/PumpkinSpiceLatte.png",
+            "skus": [
+                {
+                    "id": "psl-p",
+                    "price": 10.50,
+                    "attributes": {
+                        "tamanho": "Pequeno 200ml"
+                    }
+                },
+                {
+                    "id": "psl-m",
+                    "price": 12.50,
+                    "attributes": {
+                        "tamanho": "Médio 300ml"
+                    }
+                },
+                {
+                    "id": "psl-g",
+                    "price": 14.50,
+                    "attributes": {
+                        "tamanho": "Grande 400ml"
                     }
                 }
             ],
