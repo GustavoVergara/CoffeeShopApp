@@ -18,7 +18,7 @@ class SessionStore: SessionStoring {
     }
     
     private func key(id: String) -> String {
-        "\(storageKey)/\(id)"
+        "\(storageKey)-\(id)"
     }
     
     public func store(_ session: UserSession) {
@@ -34,7 +34,7 @@ class SessionStore: SessionStoring {
     }
 }
 
-public struct UserSession: Codable {
+public struct UserSession: Codable, Equatable {
     public var id: String
     public var name: String
     

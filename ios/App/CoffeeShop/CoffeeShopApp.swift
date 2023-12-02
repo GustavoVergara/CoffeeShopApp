@@ -15,11 +15,14 @@ import OrderLibrary
 class Dependencies {
     static let shared = Dependencies()
     
+    private init() {}
+    
     let draftOrderStream = DraftOrderStream()
     lazy var draftOrderTotalStream = DraftOrderTotalStream(draftOrderStream: draftOrderStream)
     lazy var draftOrderStore = DraftOrderStore(stream: draftOrderStream)
     
     let userSessionStream = UserSessionStream()
+    lazy var userSessionWorker = UserSessionWorker(mutableUserSessionStream: userSessionStream)
     
     var cartBuilder: some ViewBuilding {
         CartBuilder(
@@ -33,9 +36,9 @@ class Dependencies {
 
 @main
 struct CoffeeShopApp: App {
-    
     var body: some Scene {
-        WindowGroup {
+        Dependencies.shared.userSessionWorker.start()
+        return WindowGroup {
             NavigationBuilder { stack in
                 TabBuider(
                     menuBuilder: MenuBuilder(

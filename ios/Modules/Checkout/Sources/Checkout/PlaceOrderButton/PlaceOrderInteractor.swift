@@ -31,6 +31,10 @@ class PlaceOrderInteractor: PlaceOrderInteracting {
         draftOrderTotalStream.publisher().sink { totalPrice in
             presenter.updateTotalPrice(to: totalPrice)
         }.store(in: &cancellables)
+        
+        mutableUserSessionStream.publisher().removeDuplicates().sink { session in
+            presenter.updateUserName(session?.name ?? "")
+        }.store(in: &cancellables)
     }
     
     func didPressPlaceOrder() {

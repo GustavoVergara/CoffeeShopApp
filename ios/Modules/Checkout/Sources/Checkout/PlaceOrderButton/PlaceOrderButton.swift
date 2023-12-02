@@ -5,8 +5,6 @@ import OrderLibrary
 struct PlaceOrderButton: View {
     let interactor: PlaceOrderInteractor
     @ObservedObject var viewModel: PlaceOrderButtonViewModel
-
-    @State var userName = ""
     
     var body: some View {
         Button {
@@ -24,9 +22,9 @@ struct PlaceOrderButton: View {
         .padding()
         .tint(R.color.darkGreen())
         .alert("Qual o seu nome?", isPresented: $viewModel.isConfirmationPresented) {
-            TextField("Digite seu nome", text: $userName)
+            TextField("Digite seu nome", text: $viewModel.userName)
             AsyncButton {
-                await interactor.didConfirmOrder(name: userName)
+                await interactor.didConfirmOrder(name: viewModel.userName)
             } label: {
                 Text("Fazer o pedido")
             }

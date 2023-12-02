@@ -23,8 +23,7 @@ struct PlaceOrderButtonBuilder: ViewBuilding {
     
     func build() -> some View {
         return PlaceOrderButton(interactor: interactor,
-                                viewModel: viewModel,
-                                userName: "")
+                                viewModel: viewModel)
     }
 }
 
@@ -39,7 +38,6 @@ struct PreviewPlaceOrderButtonBuilder: ViewBuilding {
                                               mutableUserSessionStream: PreviewUserSessionStream(),
                                               presenter: viewModel)
         return PlaceOrderButton(interactor: interactor,
-                                viewModel: viewModel,
-                                userName: "")
+                                viewModel: viewModel)
     }
 }
