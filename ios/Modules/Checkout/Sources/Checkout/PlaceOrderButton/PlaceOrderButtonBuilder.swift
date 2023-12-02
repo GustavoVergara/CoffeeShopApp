@@ -5,6 +5,7 @@ import OrderLibrary
 struct PlaceOrderButtonBuilder: ViewBuilding {
     var id: String { "placeOrderButton" }
     
+    let draftOrderStore: DraftOrderStoring
     let draftOrderStream: any DraftOrderStreaming
     let draftOrderTotalStream: DraftOrderTotalStreaming
     let mutableUserSessionStream: MutableUserSessionStreaming
@@ -12,13 +13,23 @@ struct PlaceOrderButtonBuilder: ViewBuilding {
     let viewModel: PlaceOrderButtonViewModel
     let interactor: PlaceOrderInteractor
     
-    init(draftOrderStream: any DraftOrderStreaming, draftOrderTotalStream: DraftOrderTotalStreaming, mutableUserSessionStream: MutableUserSessionStreaming) {
+    init(
+        draftOrderStore: DraftOrderStoring,
+        draftOrderStream: any DraftOrderStreaming,
+        draftOrderTotalStream: DraftOrderTotalStreaming,
+        mutableUserSessionStream: MutableUserSessionStreaming
+    ) {
+        self.draftOrderStore = draftOrderStore
         self.draftOrderStream = draftOrderStream
         self.draftOrderTotalStream = draftOrderTotalStream
         self.mutableUserSessionStream = mutableUserSessionStream
         
         viewModel = PlaceOrderButtonViewModel()
-        interactor = PlaceOrderInteractor(draftOrderStream: draftOrderStream, draftOrderTotalStream: draftOrderTotalStream, mutableUserSessionStream: mutableUserSessionStream, presenter: viewModel)
+        interactor = PlaceOrderInteractor(draftOrderStore: draftOrderStore,
+                                          draftOrderStream: draftOrderStream,
+                                          draftOrderTotalStream: draftOrderTotalStream,
+                                          mutableUserSessionStream: mutableUserSessionStream,
+                                          presenter: viewModel)
     }
     
     func build() -> some View {
@@ -33,7 +44,8 @@ struct PreviewPlaceOrderButtonBuilder: ViewBuilding {
     func build() -> some View {
         let draftOrderStore = PreviewDraftOrderStore()
         let viewModel = PlaceOrderButtonViewModel()
-        let interactor = PlaceOrderInteractor(draftOrderStream: draftOrderStore.stream,
+        let interactor = PlaceOrderInteractor(draftOrderStore: draftOrderStore,
+                                              draftOrderStream: draftOrderStore.stream,
                                               draftOrderTotalStream: draftOrderStore.totalStream,
                                               mutableUserSessionStream: PreviewUserSessionStream(),
                                               presenter: viewModel)

@@ -35,4 +35,8 @@ public class PreviewDraftOrderStore: DraftOrderStoring {
         products.remove(at: index)
         stream.emit(products)
     }
+    
+    public func clear() {
+        stream.emit([])
+    }
 }

@@ -1,10 +1,8 @@
 import Combine
 
 public protocol DraftOrderStreaming {
-    associatedtype P: Publisher<[DraftOrderProduct], Never>
-    
     var data: [DraftOrderProduct] { get }
-    func publisher() -> P
+    func publisher() -> AnyPublisher<[DraftOrderProduct], Never>
 }
 
 public protocol MutableDraftOrderStreaming: DraftOrderStreaming {
@@ -17,8 +15,8 @@ public class DraftOrderStream: MutableDraftOrderStreaming, ObservableObject {
     
     public init() {}
 
-    public func publisher() -> some Publisher<[DraftOrderProduct], Never> {
-        $data
+    public func publisher() -> AnyPublisher<[DraftOrderProduct], Never> {
+        $data.eraseToAnyPublisher()
     }
     
     public func emit(_ products: [DraftOrderProduct]) {

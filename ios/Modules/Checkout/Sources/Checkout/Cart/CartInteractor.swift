@@ -1,3 +1,5 @@
+import Foundation
+import Combine
 import Core
 import OrderLibrary
 
@@ -12,16 +14,23 @@ protocol CartPresenting {
 
 class CartInteractor: CartInteracting {
     private let draftOrderStore: DraftOrderStoring
+    private let draftOrderStream: DraftOrderStreaming
     private let presenter: CartPresenting
+    
+    private var cancellables = Set<AnyCancellable>()
     
     init(
         draftOrderStore: DraftOrderStoring,
+        draftOrderStream: DraftOrderStreaming,
         presenter: CartPresenting
     ) {
         self.draftOrderStore = draftOrderStore
+        self.draftOrderStream = draftOrderStream
         self.presenter = presenter
         
-        presenter.displayItems(draftOrderStore.getProducts())
+        draftOrderStream.publisher().receive(on: DispatchQueue.main).sink { products in
+            presenter.displayItems(products)
+        }.store(in: &cancellables)
     }
     
     func increaseQuantity(productID: String, skuID: String) {
@@ -29,7 +38,6 @@ class CartInteractor: CartInteracting {
             return
         }
         draftOrderStore.updateProductQuantity(id: productID, skuID: skuID, quantity: product.quantity + 1)
-        presenter.displayItems(draftOrderStore.getProducts())
     }
     
     func decreaseQuantity(productID: String, skuID: String) {
@@ -42,6 +50,5 @@ class CartInteractor: CartInteracting {
         } else {
             draftOrderStore.removeProduct(id: productID, skuID: skuID)
         }
-        presenter.displayItems(draftOrderStore.getProducts())
     }
 }

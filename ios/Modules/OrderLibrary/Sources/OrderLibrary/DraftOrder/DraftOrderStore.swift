@@ -1,6 +1,7 @@
 public protocol DraftOrderStoring {
     func addProduct(_ product: DraftOrderProduct)
     func removeProduct(id: String, skuID: String)
+    func clear()
     func updateProductQuantity(id: String, skuID: String, quantity: Int)
     func getProducts() -> [DraftOrderProduct]
 }
@@ -44,6 +45,11 @@ public class DraftOrderStore: DraftOrderStoring {
         products.remove(at: addedProductIndex)
         store.store(products, forKey: storageKey)
         stream.emit(products)
+    }
+    
+    public func clear() {
+        store.removeObject(forKey: storageKey)
+        stream.emit([])
     }
     
     public func updateProductQuantity(id: String, skuID: String, quantity: Int) {

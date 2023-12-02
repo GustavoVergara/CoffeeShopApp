@@ -8,6 +8,7 @@ protocol PlaceOrderInteracting {
 }
 
 class PlaceOrderInteractor: PlaceOrderInteracting {
+    let draftOrderStore: DraftOrderStoring
     let draftOrderStream: any DraftOrderStreaming
     let draftOrderTotalStream: DraftOrderTotalStreaming
     let mutableUserSessionStream: MutableUserSessionStreaming
@@ -16,23 +17,25 @@ class PlaceOrderInteractor: PlaceOrderInteracting {
     private var cancellables = Set<AnyCancellable>()
     
     init(
+        draftOrderStore: DraftOrderStoring,
         draftOrderStream: any DraftOrderStreaming,
         draftOrderTotalStream: DraftOrderTotalStreaming,
         mutableUserSessionStream: MutableUserSessionStreaming,
         checkoutNetworker: CheckoutNetworking = CheckoutNetworker(),
         presenter: PlaceOrderPresenter
     ) {
+        self.draftOrderStore = draftOrderStore
         self.draftOrderStream = draftOrderStream
         self.draftOrderTotalStream = draftOrderTotalStream
         self.mutableUserSessionStream = mutableUserSessionStream
         self.checkoutNetworker = checkoutNetworker
         self.presenter = presenter
         
-        draftOrderTotalStream.publisher().sink { totalPrice in
+        draftOrderTotalStream.publisher().receive(on: DispatchQueue.main).sink { totalPrice in
             presenter.updateTotalPrice(to: totalPrice)
         }.store(in: &cancellables)
         
-        mutableUserSessionStream.publisher().removeDuplicates().sink { session in
+        mutableUserSessionStream.publisher().receive(on: DispatchQueue.main).removeDuplicates().sink { session in
             presenter.updateUserName(session?.name ?? "")
         }.store(in: &cancellables)
     }
@@ -52,6 +55,7 @@ class PlaceOrderInteractor: PlaceOrderInteracting {
         let order = orderNetworkObject(name: name)
         do {
             try await checkoutNetworker.placeOrder(order)
+            draftOrderStore.clear()
             print("Successfuly placed order")
             // present success screen
         } catch {

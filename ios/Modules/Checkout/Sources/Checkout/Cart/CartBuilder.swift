@@ -21,8 +21,11 @@ public struct CartBuilder: ViewBuilding {
         self.draftOrderStream = draftOrderStream
         
         viewModel = CartViewModel()
-        interactor = CartInteractor(draftOrderStore: draftOrderStore, presenter: viewModel)
-        placeOrderButtonBuilder = PlaceOrderButtonBuilder(draftOrderStream: draftOrderStream, draftOrderTotalStream: draftOrderTotalStream, mutableUserSessionStream: mutableUserSessionStream)
+        interactor = CartInteractor(draftOrderStore: draftOrderStore, draftOrderStream: draftOrderStream, presenter: viewModel)
+        placeOrderButtonBuilder = PlaceOrderButtonBuilder(draftOrderStore: draftOrderStore,
+                                                          draftOrderStream: draftOrderStream,
+                                                          draftOrderTotalStream: draftOrderTotalStream,
+                                                          mutableUserSessionStream: mutableUserSessionStream)
     }
     
     public func build() -> some View {
@@ -38,9 +41,12 @@ struct PreviewCartBuilder: ViewBuilding {
     func build() -> some View {
         let draftOrderStore = PreviewDraftOrderStore(products: products)
         let viewModel = CartViewModel()
-        let interactor = CartInteractor(draftOrderStore: draftOrderStore, presenter: viewModel)
+        let interactor = CartInteractor(draftOrderStore: draftOrderStore, draftOrderStream: draftOrderStore.stream, presenter: viewModel)
         return CartView(
-            placeOrderButtonBuilder: PlaceOrderButtonBuilder(draftOrderStream: draftOrderStore.stream, draftOrderTotalStream: draftOrderStore.totalStream, mutableUserSessionStream: PreviewUserSessionStream()),
+            placeOrderButtonBuilder: PlaceOrderButtonBuilder(draftOrderStore: draftOrderStore,
+                                                             draftOrderStream: draftOrderStore.stream,
+                                                             draftOrderTotalStream: draftOrderStore.totalStream,
+                                                             mutableUserSessionStream: PreviewUserSessionStream()),
             interactor: interactor,
             viewModel: viewModel
         )
