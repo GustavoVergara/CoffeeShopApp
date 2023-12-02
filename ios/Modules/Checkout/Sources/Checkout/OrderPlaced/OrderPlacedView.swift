@@ -24,11 +24,12 @@ struct OrderPlacedView: View {
             Text("Pedido feito com sucesso!")
                 .font(.title)
                 .foregroundColor(.white)
-            HStack {
-                Text("Previsão de entrega de:")
+            Group {
+                Text("Previsão de entrega:")
                 Text(viewModel.timeToDeliver)
                     .bold()
-            }.font(.title2)
+            }
+                .font(.title2)
                 .foregroundColor(.white)
             Spacer()
             Button {
