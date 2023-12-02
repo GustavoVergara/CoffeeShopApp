@@ -9,15 +9,20 @@ public struct MenuBuilder: ViewBuilding {
     let cartBuilder: any ViewBuilding
     let draftOrderStore: DraftOrderStoring
     
+    private let viewModel: MenuViewModel
+    private let interactor: MenuInteractor
+
+    
     public init(navigationStack: ViewStacking, cartBuilder: any ViewBuilding, draftOrderStore: DraftOrderStoring) {
         self.navigationStack = navigationStack
         self.cartBuilder = cartBuilder
         self.draftOrderStore = draftOrderStore
+        
+        self.viewModel = MenuViewModel()
+        self.interactor = MenuInteractor(navigationStack: navigationStack, cartBuilder: cartBuilder, draftOrderStore: draftOrderStore, presenter: viewModel)
     }
 
     public func build() -> some View {
-        let viewModel = MenuViewModel()
-        let interactor = MenuInteractor(navigationStack: navigationStack, cartBuilder: cartBuilder, draftOrderStore: draftOrderStore, presenter: viewModel)
         return MenuView(interactor: interactor, viewModel: viewModel)
     }
 }

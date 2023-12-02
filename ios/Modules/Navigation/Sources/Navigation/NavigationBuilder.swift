@@ -7,7 +7,7 @@ public struct NavigationBuilder<Root: ViewBuilding>: ViewBuilding {
     private let view: NavigationView<Root>
 
     public init(root: @escaping (ViewStacking) -> Root) {
-        view = NavigationView(navStack: stackObject, root: root)
+        view = NavigationView(navStack: stackObject, rootBuilder: root(stackObject))
     }
     
     public func build() -> some View {

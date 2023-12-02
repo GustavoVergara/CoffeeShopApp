@@ -4,11 +4,11 @@ struct NavigationView<Root: ViewBuilding>: View {
     @ObservedObject
     var navStack: NavigationStackObject
     
-    let root: (ViewStacking) -> Root
+    let rootBuilder: Root
     
     var body: some View {
         NavigationStack(path: $navStack.path) {
-            root(navStack).build()
+            rootBuilder.build()
                 .navigationDestination(for: NavigationItem.self) { hashable in
                     navStack.build(for: hashable)
                 }
