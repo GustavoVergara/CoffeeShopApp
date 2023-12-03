@@ -86,3 +86,20 @@ public struct Order: Codable, Equatable {
         self.user = user
     }
 }
+
+
+public class PreviewOrderHistoryStore: OrderHistoryStoring {
+    var orders: [Order]
+    
+    public init(orders: [Order] = []) {
+        self.orders = orders
+    }
+    
+    public func getOrders() -> [Order] {
+        orders
+    }
+    
+    public func store(_ order: Order) {
+        orders.append(order)
+    }
+}

@@ -41,32 +41,35 @@ struct CoffeeShopApp: App {
         Dependencies.shared.userSessionWorker.start()
         return WindowGroup {
             NavigationBuilder { stack in
-                MenuBuilder(
-                    navigationStack: stack,
-                    cartBuilder: Dependencies.shared.cartBuilder(stacker: stack),
-                    openCartButtonBuilder: OpenCartButtonBuilder(
-                        draftOrderStream: Dependencies.shared.draftOrderStream,
-                        draftOrderTotalStream: Dependencies.shared.draftOrderTotalStream,
-                        stacker: stack,
-                        cartBuilder: Dependencies.shared.cartBuilder(stacker: stack)
+                TabBuider(
+                    firstBuilder: MenuBuilder(
+                        navigationStack: stack,
+                        cartBuilder: Dependencies.shared.cartBuilder(stacker: stack),
+                        openCartButtonBuilder: OpenCartButtonBuilder(
+                            draftOrderStream: Dependencies.shared.draftOrderStream,
+                            draftOrderTotalStream: Dependencies.shared.draftOrderTotalStream,
+                            stacker: stack,
+                            cartBuilder: Dependencies.shared.cartBuilder(stacker: stack)
+                        ),
+                        draftOrderStore: Dependencies.shared.draftOrderStore,
+                        draftOrderStream: Dependencies.shared.draftOrderStream
                     ),
-                    draftOrderStore: Dependencies.shared.draftOrderStore,
-                    draftOrderStream: Dependencies.shared.draftOrderStream
+                    secondBuilder: OrderListBuilder(orderHistoryStore: OrderHistoryStore())
                 )
             }.build()
         }
     }
 }
 
-struct TabBuider<MenuB: ViewBuilding, CartB: ViewBuilding>: ViewBuilding {
+struct TabBuider<FBuilder: ViewBuilding, SBuilder: ViewBuilding>: ViewBuilding {
     var id: String { "root/tabs" }
-    let menuBuilder: MenuB
-    let cartBuilder: CartB
+    let firstBuilder: FBuilder
+    let secondBuilder: SBuilder
     
     func build() -> some View {
         TabView {
-            menuBuilder.build()
-            cartBuilder.build()
+            firstBuilder.build()
+            secondBuilder.build()
         }
         .tint(R.color.darkGreen())
     }
