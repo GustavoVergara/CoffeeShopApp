@@ -47,9 +47,9 @@ struct CoffeeShopApp: App {
         dependencies.userSessionWorker.start()
         dependencies.orderHistoryWorker.start()
         return WindowGroup {
-            NavigationBuilder { stack in
-                TabBuider(
-                    firstBuilder: MenuBuilder(
+            TabBuider(
+                firstBuilder: NavigationBuilder { stack in
+                    MenuBuilder(
                         navigationStack: stack,
                         cartBuilder: dependencies.cartBuilder(stacker: stack),
                         openCartButtonBuilder: OpenCartButtonBuilder(
@@ -60,10 +60,18 @@ struct CoffeeShopApp: App {
                         ),
                         draftOrderStore: dependencies.draftOrderStore,
                         draftOrderStream: dependencies.draftOrderStream
-                    ),
-                    secondBuilder: OrderListBuilder(orderHistoryStream: dependencies.orderHistoryStream)
-                )
-            }.build()
+                    )
+                }.modify {
+                    $0
+                        .tabItem {
+                            Label("Menu", systemImage: "menucard.fill")
+                        }
+                        .tint(.white)
+                },
+                secondBuilder: NavigationBuilder { _ in
+                    OrderListBuilder(orderHistoryStream: dependencies.orderHistoryStream)
+                }
+            ).build()
         }
     }
 }
@@ -99,9 +107,9 @@ struct CoffeeShopApp_Previews: PreviewProvider {
     }
     
     static var previews: some View {
-        NavigationBuilder { stack in
-            TabBuider(
-                firstBuilder: MenuBuilder(
+        TabBuider(
+            firstBuilder: NavigationBuilder { stack in
+                MenuBuilder(
                     navigationStack: stack,
                     cartBuilder: cartBuilder(stack: stack),
                     openCartButtonBuilder: OpenCartButtonBuilder(
@@ -112,10 +120,21 @@ struct CoffeeShopApp_Previews: PreviewProvider {
                     ),
                     draftOrderStore: draftOrderStore,
                     draftOrderStream: draftOrderStore.stream
-                ),
-                secondBuilder: OrderListBuilder(orderHistoryStream: orderHistoryStream)
-            )
-            
-        }.build()
+                )
+            }.modify {
+                $0
+                    .tabItem {
+                        Label("Menu", systemImage: "menucard.fill")
+                    }
+                    .tint(.white)
+            },
+            secondBuilder: NavigationBuilder { stack in
+                OrderListBuilder(orderHistoryStream: orderHistoryStream)
+            }.modify {
+                $0.tabItem {
+                    Label("Pedidos", systemImage: "list.bullet")
+                }
+            }
+        ).build()
     }
 }

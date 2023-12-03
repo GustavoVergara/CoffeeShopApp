@@ -24,10 +24,12 @@ struct ProductDetailView<AddToDraftOrderButtonBuild: ViewBuilding>: View {
         .ignoresSafeArea(.container, edges: .top)
         .navigationBarTitleDisplayMode(.inline)
         .toolbarBackground(.hidden, for: .navigationBar)
+        .toolbar(.hidden, for: .tabBar)
         .safeAreaInset(edge: .bottom) {
             addToDraftOrderButtonBuilder.build()
                 .shadow(radius: 4)
                 .fixedSize()
+                .padding(.bottom, 8)
         }
     }
     
