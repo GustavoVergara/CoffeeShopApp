@@ -8,14 +8,21 @@ public struct CartBuilder: ViewBuilding {
     let draftOrderStore: DraftOrderStoring
     let draftOrderTotalStream: DraftOrderTotalStreaming
     let mutableUserSessionStream: MutableUserSessionStreaming
-    let draftOrderStream: any DraftOrderStreaming
+    let draftOrderStream: DraftOrderStreaming
     let stacker: ViewStacking
     
     let viewModel: CartViewModel
     let interactor: CartInteractor
     let placeOrderButtonBuilder: PlaceOrderButtonBuilder
     
-    public init(draftOrderStore: DraftOrderStoring, draftOrderTotalStream: DraftOrderTotalStreaming, mutableUserSessionStream: MutableUserSessionStreaming, draftOrderStream: any DraftOrderStreaming, stacker: ViewStacking) {
+    public init(
+        draftOrderStore: DraftOrderStoring,
+        draftOrderTotalStream: DraftOrderTotalStreaming,
+        mutableUserSessionStream: MutableUserSessionStreaming,
+        draftOrderStream: DraftOrderStreaming,
+        mutableOrderHistoryStream: MutableOrderHistoryStreaming,
+        stacker: ViewStacking
+    ) {
         self.draftOrderStore = draftOrderStore
         self.draftOrderTotalStream = draftOrderTotalStream
         self.mutableUserSessionStream = mutableUserSessionStream
@@ -28,6 +35,7 @@ public struct CartBuilder: ViewBuilding {
                                                           draftOrderStream: draftOrderStream,
                                                           draftOrderTotalStream: draftOrderTotalStream,
                                                           mutableUserSessionStream: mutableUserSessionStream,
+                                                          mutableOrderHistoryStream: mutableOrderHistoryStream,
                                                           stacker: stacker)
     }
     
@@ -51,6 +59,7 @@ struct PreviewCartBuilder: ViewBuilding {
                                                              draftOrderStream: draftOrderStore.stream,
                                                              draftOrderTotalStream: draftOrderStore.totalStream,
                                                              mutableUserSessionStream: PreviewUserSessionStream(),
+                                                             mutableOrderHistoryStream: PreviewOrderHistoryStream(),
                                                              stacker: stacker),
             interactor: interactor,
             viewModel: viewModel

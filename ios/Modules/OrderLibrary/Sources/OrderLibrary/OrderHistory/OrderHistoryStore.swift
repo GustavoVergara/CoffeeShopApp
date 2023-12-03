@@ -1,9 +1,9 @@
-public protocol OrderHistoryStoring {
+protocol OrderHistoryStoring {
     func store(_ order: Order)
     func getOrders() -> [Order]
 }
 
-public class OrderHistoryStore: OrderHistoryStoring {
+class OrderHistoryStore: OrderHistoryStoring {
     let store: CodableStoring
     
     private let orderLedgerKey = "order-ledger"

@@ -9,6 +9,7 @@ struct PlaceOrderButtonBuilder: ViewBuilding {
     let draftOrderStream: any DraftOrderStreaming
     let draftOrderTotalStream: DraftOrderTotalStreaming
     let mutableUserSessionStream: MutableUserSessionStreaming
+    let mutableOrderHistoryStream: MutableOrderHistoryStreaming
     let stacker: ViewStacking
     
     let viewModel: PlaceOrderButtonViewModel
@@ -19,12 +20,14 @@ struct PlaceOrderButtonBuilder: ViewBuilding {
         draftOrderStream: any DraftOrderStreaming,
         draftOrderTotalStream: DraftOrderTotalStreaming,
         mutableUserSessionStream: MutableUserSessionStreaming,
+        mutableOrderHistoryStream: MutableOrderHistoryStreaming,
         stacker: ViewStacking
     ) {
         self.draftOrderStore = draftOrderStore
         self.draftOrderStream = draftOrderStream
         self.draftOrderTotalStream = draftOrderTotalStream
         self.mutableUserSessionStream = mutableUserSessionStream
+        self.mutableOrderHistoryStream = mutableOrderHistoryStream
         self.stacker = stacker
         
         viewModel = PlaceOrderButtonViewModel()
@@ -32,6 +35,7 @@ struct PlaceOrderButtonBuilder: ViewBuilding {
                                           draftOrderStream: draftOrderStream,
                                           draftOrderTotalStream: draftOrderTotalStream,
                                           mutableUserSessionStream: mutableUserSessionStream,
+                                          mutableOrderHistoryStream: mutableOrderHistoryStream,
                                           stacker: stacker,
                                           presenter: viewModel)
     }
@@ -54,6 +58,7 @@ struct PreviewPlaceOrderButtonBuilder: ViewBuilding {
                                               draftOrderStream: draftOrderStore.stream,
                                               draftOrderTotalStream: draftOrderStore.totalStream,
                                               mutableUserSessionStream: PreviewUserSessionStream(),
+                                              mutableOrderHistoryStream: PreviewOrderHistoryStream(),
                                               stacker: stacker,
                                               presenter: viewModel)
         return PlaceOrderButton(interactor: interactor,

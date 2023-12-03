@@ -24,12 +24,16 @@ class Dependencies {
     let userSessionStream = UserSessionStream()
     lazy var userSessionWorker = UserSessionWorker(mutableUserSessionStream: userSessionStream)
     
+    let orderHistoryStream = OrderHistoryStream()
+    lazy var orderHistoryWorker = OrderHistoryWorker(mutableOrderHistoryStream: orderHistoryStream)
+    
     func cartBuilder(stacker: ViewStacking) -> some ViewBuilding {
         CartBuilder(
-            draftOrderStore: Dependencies.shared.draftOrderStore,
-            draftOrderTotalStream: Dependencies.shared.draftOrderTotalStream,
-            mutableUserSessionStream: Dependencies.shared.userSessionStream,
-            draftOrderStream: Dependencies.shared.draftOrderStream,
+            draftOrderStore: draftOrderStore,
+            draftOrderTotalStream: draftOrderTotalStream,
+            mutableUserSessionStream: userSessionStream,
+            draftOrderStream: draftOrderStream,
+            mutableOrderHistoryStream: orderHistoryStream,
             stacker: stacker
         )
     }
@@ -37,24 +41,27 @@ class Dependencies {
 
 @main
 struct CoffeeShopApp: App {
+    let dependencies = Dependencies.shared
+    
     var body: some Scene {
-        Dependencies.shared.userSessionWorker.start()
+        dependencies.userSessionWorker.start()
+        dependencies.orderHistoryWorker.start()
         return WindowGroup {
             NavigationBuilder { stack in
                 TabBuider(
                     firstBuilder: MenuBuilder(
                         navigationStack: stack,
-                        cartBuilder: Dependencies.shared.cartBuilder(stacker: stack),
+                        cartBuilder: dependencies.cartBuilder(stacker: stack),
                         openCartButtonBuilder: OpenCartButtonBuilder(
-                            draftOrderStream: Dependencies.shared.draftOrderStream,
-                            draftOrderTotalStream: Dependencies.shared.draftOrderTotalStream,
+                            draftOrderStream: dependencies.draftOrderStream,
+                            draftOrderTotalStream: dependencies.draftOrderTotalStream,
                             stacker: stack,
-                            cartBuilder: Dependencies.shared.cartBuilder(stacker: stack)
+                            cartBuilder: dependencies.cartBuilder(stacker: stack)
                         ),
-                        draftOrderStore: Dependencies.shared.draftOrderStore,
-                        draftOrderStream: Dependencies.shared.draftOrderStream
+                        draftOrderStore: dependencies.draftOrderStore,
+                        draftOrderStream: dependencies.draftOrderStream
                     ),
-                    secondBuilder: OrderListBuilder(orderHistoryStore: OrderHistoryStore())
+                    secondBuilder: OrderListBuilder(orderHistoryStream: dependencies.orderHistoryStream)
                 )
             }.build()
         }
@@ -78,33 +85,37 @@ struct TabBuider<FBuilder: ViewBuilding, SBuilder: ViewBuilding>: ViewBuilding {
 struct CoffeeShopApp_Previews: PreviewProvider {
     static let draftOrderStore = PreviewDraftOrderStore()
     static let userSessionStream = PreviewUserSessionStream()
+    static let orderHistoryStream = PreviewOrderHistoryStream()
+    
+    static func cartBuilder(stack: ViewStacking) -> some ViewBuilding {
+        CartBuilder(
+            draftOrderStore: draftOrderStore,
+            draftOrderTotalStream: draftOrderStore.totalStream,
+            mutableUserSessionStream: userSessionStream,
+            draftOrderStream: draftOrderStore.stream,
+            mutableOrderHistoryStream: orderHistoryStream,
+            stacker: stack
+        )
+    }
     
     static var previews: some View {
         NavigationBuilder { stack in
-            MenuBuilder(
-                navigationStack: stack,
-                cartBuilder: CartBuilder(
-                    draftOrderStore: draftOrderStore,
-                    draftOrderTotalStream: draftOrderStore.totalStream,
-                    mutableUserSessionStream: userSessionStream,
-                    draftOrderStream: draftOrderStore.stream,
-                    stacker: stack
-                ),
-                openCartButtonBuilder: OpenCartButtonBuilder(
-                    draftOrderStream: draftOrderStore.stream,
-                    draftOrderTotalStream: draftOrderStore.totalStream,
-                    stacker: stack,
-                    cartBuilder: CartBuilder(
-                        draftOrderStore: draftOrderStore,
-                        draftOrderTotalStream: draftOrderStore.totalStream,
-                        mutableUserSessionStream: userSessionStream,
+            TabBuider(
+                firstBuilder: MenuBuilder(
+                    navigationStack: stack,
+                    cartBuilder: cartBuilder(stack: stack),
+                    openCartButtonBuilder: OpenCartButtonBuilder(
                         draftOrderStream: draftOrderStore.stream,
-                        stacker: stack
-                    )
+                        draftOrderTotalStream: draftOrderStore.totalStream,
+                        stacker: stack,
+                        cartBuilder: cartBuilder(stack: stack)
+                    ),
+                    draftOrderStore: draftOrderStore,
+                    draftOrderStream: draftOrderStore.stream
                 ),
-                draftOrderStore: draftOrderStore,
-                draftOrderStream: draftOrderStore.stream
+                secondBuilder: OrderListBuilder(orderHistoryStream: orderHistoryStream)
             )
+            
         }.build()
     }
 }

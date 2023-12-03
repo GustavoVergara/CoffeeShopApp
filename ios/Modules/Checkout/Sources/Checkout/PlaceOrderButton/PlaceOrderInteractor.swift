@@ -13,9 +13,9 @@ class PlaceOrderInteractor: PlaceOrderInteracting {
     let draftOrderStream: any DraftOrderStreaming
     let draftOrderTotalStream: DraftOrderTotalStreaming
     let mutableUserSessionStream: MutableUserSessionStreaming
+    let mutableOrderHistoryStream: MutableOrderHistoryStreaming
     let stacker: ViewStacking
     let checkoutNetworker: CheckoutNetworking
-    let orderHistoryStore: OrderHistoryStoring
     let presenter: PlaceOrderPresenter
     private var cancellables = Set<AnyCancellable>()
     
@@ -24,8 +24,8 @@ class PlaceOrderInteractor: PlaceOrderInteracting {
         draftOrderStream: any DraftOrderStreaming,
         draftOrderTotalStream: DraftOrderTotalStreaming,
         mutableUserSessionStream: MutableUserSessionStreaming,
+        mutableOrderHistoryStream: MutableOrderHistoryStreaming,
         stacker: ViewStacking,
-        orderHistoryStore: OrderHistoryStoring = OrderHistoryStore(),
         checkoutNetworker: CheckoutNetworking = CheckoutNetworker(),
         presenter: PlaceOrderPresenter
     ) {
@@ -33,8 +33,8 @@ class PlaceOrderInteractor: PlaceOrderInteracting {
         self.draftOrderStream = draftOrderStream
         self.draftOrderTotalStream = draftOrderTotalStream
         self.mutableUserSessionStream = mutableUserSessionStream
+        self.mutableOrderHistoryStream = mutableOrderHistoryStream
         self.stacker = stacker
-        self.orderHistoryStore = orderHistoryStore
         self.checkoutNetworker = checkoutNetworker
         self.presenter = presenter
         
@@ -74,7 +74,7 @@ class PlaceOrderInteractor: PlaceOrderInteracting {
         draftOrderStore.clear()
         stacker.push(OrderPlacedBuilder(stacker: stacker, response: response))
         
-        orderHistoryStore.store(Order(id: response.orderID, products: draftOrderProducts, date: response.date, estimatedDeliveryDate: response.expectedDeliveryDate, user: user))
+        mutableOrderHistoryStream.addOrder(Order(id: response.orderID, products: draftOrderProducts, date: response.date, estimatedDeliveryDate: response.expectedDeliveryDate, user: user))
     }
     
     private func orderNetworkObject(name: String) -> OrderNetworkObject {

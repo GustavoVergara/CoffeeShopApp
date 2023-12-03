@@ -3,33 +3,28 @@ import Navigation
 import OrderLibrary
 
 public struct OrderListBuilder: ViewBuilding {
-    let orderHistoryStore: OrderHistoryStoring
+    let orderHistoryStream: OrderHistoryStreaming
     
-    public init(orderHistoryStore: OrderHistoryStoring) {
-        self.orderHistoryStore = orderHistoryStore
+    public init(orderHistoryStream: OrderHistoryStreaming) {
+        self.orderHistoryStream = orderHistoryStream
     }
     
     public var id: String { "OrderList" }
     
     public func build() -> some View {
         let viewModel = OrderListViewModel()
-        let interactor = OrderListInteractor(presenter: viewModel, orderHistoryStore: orderHistoryStore)
+        let interactor = OrderListInteractor(presenter: viewModel, orderHistoryStream: orderHistoryStream)
         return OrderListView(interactor: interactor, viewModel: viewModel)
     }
 }
 
 
 struct PreviewOrderListBuilder: ViewBuilding {
-    var id: String { "OrderList" }
+    var id: String { "OrderList/preview" }
     
     func build() -> some View {
-        let orders = [
-            Order(id: "0", products: [], date: Date(), estimatedDeliveryDate: Date().addingTimeInterval(2 * 60), user: UserSession(id: "user-id", name: "Gustavo (Preview)")),
-            Order(id: "1", products: [], date: Date(), estimatedDeliveryDate: Date().addingTimeInterval(-2 * 24 * 60 * 60), user: UserSession(id: "user-id", name: "Gustavo (Preview)")),
-            Order(id: "2", products: [], date: Date(), estimatedDeliveryDate: Date().addingTimeInterval(-14 * 24 * 60 * 60), user: UserSession(id: "user-id", name: "Gustavo (Preview)")),
-        ]
         let viewModel = OrderListViewModel()
-        let interactor = OrderListInteractor(presenter: viewModel, orderHistoryStore: PreviewOrderHistoryStore(orders: orders))
+        let interactor = OrderListInteractor(presenter: viewModel, orderHistoryStream: PreviewOrderHistoryStream())
         return OrderListView(interactor: interactor, viewModel: viewModel)
     }
 }

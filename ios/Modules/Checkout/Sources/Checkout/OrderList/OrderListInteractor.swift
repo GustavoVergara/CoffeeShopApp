@@ -1,4 +1,4 @@
-//import Combine
+import Combine
 import Navigation
 import Foundation
 import OrderLibrary
@@ -9,18 +9,24 @@ protocol OrderListInteracting {
 
 class OrderListInteractor: OrderListInteracting {
     let presenter: OrderListPresenting
-    let orderHistoryStore: OrderHistoryStoring
+    let orderHistoryStream: OrderHistoryStreaming
+    
+    private var cancellables = Set<AnyCancellable>()
     
     init(
         presenter: OrderListPresenting,
-        orderHistoryStore: OrderHistoryStoring
+        orderHistoryStream: OrderHistoryStreaming
     ) {
         self.presenter = presenter
-        self.orderHistoryStore = orderHistoryStore
+        self.orderHistoryStream = orderHistoryStream
+        
+        orderHistoryStream.publisher().sink { orders in
+            presenter.displayOrders(orders.sorted(by: { $0.estimatedDeliveryDate > $1.estimatedDeliveryDate }))
+        }.store(in: &cancellables)
     }
     
     func didAppear() {
-        let orders = orderHistoryStore.getOrders()
-        presenter.displayOrders(orders)
+//        let orders = orderHistoryStore.getOrders()
+//        presenter.displayOrders(orders)
     }
 }
