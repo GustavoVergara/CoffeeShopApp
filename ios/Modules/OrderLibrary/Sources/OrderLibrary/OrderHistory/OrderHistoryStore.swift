@@ -35,7 +35,9 @@ public class OrderHistoryStore: OrderHistoryStoring {
     public func store(_ order: Order) {
         var ledger = getLedger()
         ledger.orderIDs.append(order.id)
-        store.store(ledger, forKey: orderLedgerKey)
+        let storedLedger = store.store(ledger, forKey: orderLedgerKey)
+        guard storedLedger else { return }
+        self.ledger = ledger
         store.store(order, forKey: key(id: order.id))
     }
     
@@ -56,6 +58,7 @@ public class OrderHistoryStore: OrderHistoryStoring {
         
         if ledger != modifiableLedger {
             store.store(modifiableLedger, forKey: orderLedgerKey)
+            self.ledger = modifiableLedger
         }
         
         return orders

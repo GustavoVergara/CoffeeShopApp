@@ -15,6 +15,7 @@ class PlaceOrderInteractor: PlaceOrderInteracting {
     let mutableUserSessionStream: MutableUserSessionStreaming
     let stacker: ViewStacking
     let checkoutNetworker: CheckoutNetworking
+    let orderHistoryStore: OrderHistoryStoring
     let presenter: PlaceOrderPresenter
     private var cancellables = Set<AnyCancellable>()
     
@@ -24,6 +25,7 @@ class PlaceOrderInteractor: PlaceOrderInteracting {
         draftOrderTotalStream: DraftOrderTotalStreaming,
         mutableUserSessionStream: MutableUserSessionStreaming,
         stacker: ViewStacking,
+        orderHistoryStore: OrderHistoryStoring = OrderHistoryStore(),
         checkoutNetworker: CheckoutNetworking = CheckoutNetworker(),
         presenter: PlaceOrderPresenter
     ) {
@@ -32,6 +34,7 @@ class PlaceOrderInteractor: PlaceOrderInteracting {
         self.draftOrderTotalStream = draftOrderTotalStream
         self.mutableUserSessionStream = mutableUserSessionStream
         self.stacker = stacker
+        self.orderHistoryStore = orderHistoryStore
         self.checkoutNetworker = checkoutNetworker
         self.presenter = presenter
         
@@ -59,7 +62,7 @@ class PlaceOrderInteractor: PlaceOrderInteracting {
         let order = orderNetworkObject(name: name)
         do {
             let response = try await checkoutNetworker.placeOrder(order)
-            await onSuccessfulPlaceOrder(response)
+            await onSuccessfulPlaceOrder(user: UserSession(id: order.user.id, name: order.user.name), draftOrderProducts: draftOrderStream.data, response: response)
         } catch {
             // do something when it fails
             print("Failed to place order, error: '\(error)'")
@@ -67,9 +70,11 @@ class PlaceOrderInteractor: PlaceOrderInteracting {
     }
     
     @MainActor
-    private func onSuccessfulPlaceOrder(_ response: PlaceOrderResponse) {
+    private func onSuccessfulPlaceOrder(user: UserSession, draftOrderProducts: [DraftOrderProduct], response: PlaceOrderResponse) {
         draftOrderStore.clear()
         stacker.push(OrderPlacedBuilder(stacker: stacker, response: response))
+        
+        orderHistoryStore.store(Order(id: response.orderID, products: draftOrderProducts, date: response.date, estimatedDeliveryDate: response.expectedDeliveryDate, user: user))
     }
     
     private func orderNetworkObject(name: String) -> OrderNetworkObject {
