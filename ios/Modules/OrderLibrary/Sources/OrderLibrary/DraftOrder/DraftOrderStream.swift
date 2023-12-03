@@ -29,10 +29,10 @@ public protocol DraftOrderTotalStreaming {
     func publisher() -> AnyPublisher<Double, Never>
 }
 
-public struct DraftOrderTotalStream<P: DraftOrderStreaming>: DraftOrderTotalStreaming {
-    let draftOrderStream: P
+public struct DraftOrderTotalStream: DraftOrderTotalStreaming {
+    let draftOrderStream: DraftOrderStreaming
     
-    public init(draftOrderStream: P) {
+    public init(draftOrderStream: DraftOrderStreaming) {
         self.draftOrderStream = draftOrderStream
     }
     

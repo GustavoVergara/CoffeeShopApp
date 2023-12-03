@@ -10,6 +10,8 @@
 		6B300E532AD63053002B9747 /* OrderLibrary in Frameworks */ = {isa = PBXBuildFile; productRef = 6B300E522AD63053002B9747 /* OrderLibrary */; };
 		6B7F9C142B17F9070051974F /* Checkout in Frameworks */ = {isa = PBXBuildFile; productRef = 6B7F9C132B17F9070051974F /* Checkout */; };
 		6B8B0D3D2B18E80E00CBC79B /* Navigation in Frameworks */ = {isa = PBXBuildFile; productRef = 6B8B0D3C2B18E80E00CBC79B /* Navigation */; };
+		6BBC07332B1CB9A80003217F /* RootBuilder.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBC07322B1CB9A80003217F /* RootBuilder.swift */; };
+		6BBC07352B1CBA0E0003217F /* RootDependencyProvider.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BBC07342B1CBA0E0003217F /* RootDependencyProvider.swift */; };
 		6BC14EFC2AC777B3000ADFEC /* CoffeeShopApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6BC14EFB2AC777B3000ADFEC /* CoffeeShopApp.swift */; };
 		6BC14F002AC777B7000ADFEC /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BC14EFF2AC777B7000ADFEC /* Assets.xcassets */; };
 		6BC14F032AC777B7000ADFEC /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 6BC14F022AC777B7000ADFEC /* Preview Assets.xcassets */; };
@@ -23,6 +25,8 @@
 		6B300E512AD63040002B9747 /* OrderLibrary */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = OrderLibrary; path = ../Modules/OrderLibrary; sourceTree = "<group>"; };
 		6B7F9C122B17F8710051974F /* Checkout */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Checkout; path = ../Modules/Checkout; sourceTree = "<group>"; };
 		6B8B0D3B2B18D01700CBC79B /* Navigation */ = {isa = PBXFileReference; lastKnownFileType = wrapper; name = Navigation; path = ../Modules/Navigation; sourceTree = "<group>"; };
+		6BBC07322B1CB9A80003217F /* RootBuilder.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootBuilder.swift; sourceTree = "<group>"; };
+		6BBC07342B1CBA0E0003217F /* RootDependencyProvider.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RootDependencyProvider.swift; sourceTree = "<group>"; };
 		6BC14EF82AC777B3000ADFEC /* CoffeeShop.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = CoffeeShop.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		6BC14EFB2AC777B3000ADFEC /* CoffeeShopApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CoffeeShopApp.swift; sourceTree = "<group>"; };
 		6BC14EFF2AC777B7000ADFEC /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
@@ -50,6 +54,15 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		6BBC07312B1CB99A0003217F /* Root */ = {
+			isa = PBXGroup;
+			children = (
+				6BBC07322B1CB9A80003217F /* RootBuilder.swift */,
+				6BBC07342B1CBA0E0003217F /* RootDependencyProvider.swift */,
+			);
+			path = Root;
+			sourceTree = "<group>";
+		};
 		6BC14EEF2AC777B3000ADFEC = {
 			isa = PBXGroup;
 			children = (
@@ -71,6 +84,7 @@
 		6BC14EFA2AC777B3000ADFEC /* CoffeeShop */ = {
 			isa = PBXGroup;
 			children = (
+				6BBC07312B1CB99A0003217F /* Root */,
 				6BC14EFB2AC777B3000ADFEC /* CoffeeShopApp.swift */,
 				6BC14EFF2AC777B7000ADFEC /* Assets.xcassets */,
 				6BC14F012AC777B7000ADFEC /* Preview Content */,
@@ -188,7 +202,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6BBC07352B1CBA0E0003217F /* RootDependencyProvider.swift in Sources */,
 				6BC14EFC2AC777B3000ADFEC /* CoffeeShopApp.swift in Sources */,
+				6BBC07332B1CB9A80003217F /* RootBuilder.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
