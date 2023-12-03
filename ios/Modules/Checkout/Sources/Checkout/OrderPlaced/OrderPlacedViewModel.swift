@@ -6,12 +6,9 @@ protocol OrderPlacedPresenting {
 }
 
 class OrderPlacedViewModel: ObservableObject, OrderPlacedPresenting {
-    let dateFormatter = {
-        let formatter = RelativeDateTimeFormatter()
-        return formatter
-    }()
-    var cancellables = Set<AnyCancellable>()
-    
+    private let dateFormatter = RelativeDateTimeFormatter()
+    private var cancellables = Set<AnyCancellable>()
+
     @Published
     var timeToDeliver: String = ""
     
