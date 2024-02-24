@@ -5,5 +5,5 @@ extension R {
 }
 
 public extension R.image {
-    static var cappuccino = ImageResource(name: "Cappuccino", bundle: .module)
+    static var cappuccino = Resourceful.ImageResource(name: "Cappuccino", bundle: .module)
 }
