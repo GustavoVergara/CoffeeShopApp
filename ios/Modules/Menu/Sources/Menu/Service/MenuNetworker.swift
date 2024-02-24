@@ -1,3 +1,4 @@
+import Core
 import HTTP
 import Foundation
 
@@ -31,8 +32,8 @@ enum MenuEndpointRoute: HTTPRoute {
     case getMenu(storeID: String)
     
     var scheme: String { "http" }
-    var host: String { "localhost" }
-    var port: Int? { 5000 }
+    var host: String { NetworkSettings.shared.host }
+    var port: Int? { NetworkSettings.shared.port }
     var path: String {
         switch self {
         case .getMenu(let storeID):
